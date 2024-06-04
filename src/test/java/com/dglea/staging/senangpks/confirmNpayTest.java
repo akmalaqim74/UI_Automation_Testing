@@ -67,7 +67,7 @@ public class confirmNpayTest extends baseTest {
             System.out.println("Total AddOn: " + addOnPrice);
 
         }
-        return addOnPrice;
+        return Math.round(addOnPrice * 100.0) / 100.0;
 
     }
 }

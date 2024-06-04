@@ -29,7 +29,7 @@ public class personalInfoTest extends baseTest {
     @Order(1)
     public void Id(){
     //It shouldnt allow to edit
-        searchField = driver.findElement(By.cssSelector("#mat-input-13"));
+        searchField = driver.findElement(By.xpath("//input[@formcontrolname='idNumber']\n"));
         assertFalse(searchField.isEnabled());
     }
 

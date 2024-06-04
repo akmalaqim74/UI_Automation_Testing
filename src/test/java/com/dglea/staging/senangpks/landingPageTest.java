@@ -1,4 +1,5 @@
 package com.dglea.staging.senangpks;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,16 +22,21 @@ public class landingPageTest extends baseTest {
         driver.findElement(By.cssSelector(".align-center > button:nth-child(1)")).click();
     }
     @Test
+
     public void canGoToForm(){
+
         assertTrue(driver.findElement(By.cssSelector(".align-center > button:nth-child(1)")).isDisplayed());
     }
     @Test
+
     public void NricRequired(){
 
         assertTrue(driver.findElement(By.cssSelector("#mat-error-0 > strong:nth-child(1)")).isDisplayed());
     }
     @Test
+
     public void vehNoRequired(){
+
         assertTrue(driver.findElement(By.cssSelector("#mat-error-1 > strong:nth-child(1)")).isDisplayed());
     }
 
