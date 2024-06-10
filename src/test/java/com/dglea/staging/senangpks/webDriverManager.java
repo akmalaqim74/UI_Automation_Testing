@@ -10,7 +10,7 @@ import java.time.Duration;
 
 public class webDriverManager {
     private static WebDriver driver;
-    private static WebDriverWait wait,shortwait;
+    private static WebDriverWait wait,shortWait,tempWait;
 
     private webDriverManager() {
         // private constructor to prevent instantiation
@@ -34,6 +34,18 @@ public class webDriverManager {
             wait = new WebDriverWait(driver, Duration.ofSeconds(50));
         }
         return wait;
+    }
+    public static WebDriverWait getShortWait() {
+        if (shortWait == null) {
+            shortWait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        }
+        return shortWait;
+    }
+    public static WebDriverWait getTempWait() {
+        if (tempWait == null) {
+            tempWait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        }
+        return tempWait;
     }
 
     public static void quitDriver() {

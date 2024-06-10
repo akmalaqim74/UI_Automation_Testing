@@ -1,46 +1,65 @@
 package com.dglea.staging.senangpks;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import io.qameta.allure.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Epic("Landing Page")
+@Story("As User, sometimes I missed out to fill in certain field")
+@Tag("Field Validation")
+@DisplayName("Landing Page")
+@Owner("Intern Akmal")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class landingPageTest extends baseTest {
 
 
-    @BeforeAll
-    public static void setup(){
-        System.out.println("Checking if it's form page...");
-        if (!isFormPage()) {
-            System.out.println("Navigating to form page...");
-            staffId();// Ensure we navigate to the login page if not already there
+
+    @Test
+    @Order(1)
+    @Description("Are we on Landing Page (Fill in Form)?")
+    public void onForm(){
+        Allure.step("Step 1: Insert Staff Id", () -> {
+            insertStaffId();
+            assertTrue(driver.findElement(By.cssSelector(".align-center > button:nth-child(1)")).isDisplayed());
+        });
         }
-        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".align-center > button:nth-child(1)")));
-        driver.findElement(By.cssSelector(".align-center > button:nth-child(1)")).click();
-    }
     @Test
-
-    public void canGoToForm(){
-
-        assertTrue(driver.findElement(By.cssSelector(".align-center > button:nth-child(1)")).isDisplayed());
-    }
-    @Test
-
-    public void NricRequired(){
-
+    @DisplayName("Verify NRIC field cant be empty")
+    @Description("Validation If NRIC field is empty")
+    public void NricRequiredTest(){
         assertTrue(driver.findElement(By.cssSelector("#mat-error-0 > strong:nth-child(1)")).isDisplayed());
     }
+
     @Test
+    @DisplayName("Verify vehicle number field cant be empty")
+    @Description("Validation if vehicle Number field is empty")
 
-    public void vehNoRequired(){
-
-        assertTrue(driver.findElement(By.cssSelector("#mat-error-1 > strong:nth-child(1)")).isDisplayed());
+    public void vehNoRequiredTest(){
+        assertTrue(driver.findElement(By.cssSelector("#mat-error-1")).isDisplayed());
+    }
+    @Test
+    @Disabled
+    @Description("Validation if name field is empty")
+    void NameRequiredTest(){
+        assertTrue(driver.findElement(By.cssSelector("#mat-error-1")).isDisplayed());
+    }
+    @Test
+    @Disabled
+    @Description("Validation if postcode empty")
+    void postcodeRequiredTest(){
+        assertTrue(driver.findElement(By.cssSelector("#mat-error-3")).isDisplayed());
+    }
+    @Test
+    @Disabled
+    @Description("Validation if email address is empty")
+    void emailRequiredTest(){
+        assertTrue(driver.findElement(By.cssSelector("#mat-error-4")).isDisplayed());
     }
 
-
-
-
+    @RegisterExtension
+    screenShotHelper screenshot = new screenShotHelper();
 }

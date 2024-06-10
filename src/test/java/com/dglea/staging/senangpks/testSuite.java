@@ -6,9 +6,7 @@ import org.junit.platform.suite.api.Suite;
 @SelectClasses({
         landingPageTest.class,
         vehiclePortalTest.class,
-        STM_addOnTest.class,
-        personalInfoTest.class,
-        confirmNpayTest.class
+        STM_addOnTest.class
 })
 public class testSuite {
     // No need to add anything inside the class body

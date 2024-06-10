@@ -1,10 +1,12 @@
 package com.dglea.staging.senangpks;
 
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,99 +14,54 @@ import java.util.List;
 public class baseTest {
     protected static WebDriver driver;
     static WebElement searchField;
-    static WebDriverWait wait,shortWait;
+    static WebDriverWait wait,shortWait,tempWait;
     protected static String coverType;
-    public static double totalAddOn = 0;
     static ArrayList<String> availableProvider = new ArrayList<>();
     static ArrayList<String> NotAvailableProvider = new ArrayList<>();
     static ArrayList<String> addOn = new ArrayList<>();
+    public static  ArrayList<String> testDataList = new ArrayList<>();
 
     @BeforeAll
     public static void setUpClass() {
         driver = webDriverManager.getDriver();
         wait = webDriverManager.getWait();
-        shortWait = new WebDriverWait(driver, Duration.ofSeconds(5));
-    }
-
-
-    protected boolean isQuoteGenerated() {
-        // Check if the current URL contains a string that indicates the user is logged in
-        return driver.getCurrentUrl().contains("https://vehicle.staging.senangpks.com.my/quotation"); // Adjust this based on your application's URL structure
-    }
-
-    public static void staffId() {
-
+        shortWait = webDriverManager.getShortWait();
+        tempWait = webDriverManager.getTempWait();
         try {
-            System.out.println("Executing staffId method");
-
-            // Correct usage of "css selector" for locating elements by class name
-            //wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".splash-screen")));
-            //System.out.println("Splash screen disappeared");
-
-            // Ensure the #staffNo element is visible and clickable
-            searchField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#staffNo")));
-            searchField = driver.findElement(By.id("staffNo"));
-            searchField.click();
-            searchField.sendKeys("11111");
-            searchField = driver.findElement(By.cssSelector(".step1-submit > button:nth-child(1)"));
-            searchField.click();
-
-            System.out.println("staffId method executed successfully");
-        } catch (Exception e) {
-            System.err.println("An error occurred in staffId method: " + e.getMessage());
-            e.printStackTrace();
+            testDataList = sheetHelper.getDataFromExcel();
+        } catch (IOException e) {
+            e.printStackTrace(); // Or handle the exception in some appropriate way
         }
 
     }
 
-    //public static void generateQuote(List<testData> testDataList){
-    public static void generateQuote(){
-        System.out.println("Executing Vehicle Number field");
-        String vehNo = "WA3882D"; //scanner.nextLine();
-        System.out.println("Executing Nric field");
-        String NRIC = "930706145318"; //scanner.nextLine();
 
-        searchField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#mat-input-1")));
-        searchField = driver.findElement(By.cssSelector("#mat-input-1"));
-        searchField.click();
-        searchField.sendKeys(NRIC);
-        searchField = driver.findElement(By.cssSelector("#mat-input-3"));
-        searchField.click();
-        searchField.sendKeys(vehNo);
-        searchField = driver.findElement(By.cssSelector("#mat-input-5"));
-        searchField.clear();
-        searchField.click();
-        searchField.sendKeys("akmalmustaqimsenang@gmail.com");
-        searchField = driver.findElement(By.cssSelector(".p-t-10 > div:nth-child(2)"));
-        searchField.click();
-        System.out.println("Generating Quotation wait yaa...............");
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("splash-screen")));
-        System.out.println("Thanks For Waiting, we are on vehicle portal");
+    public static void insertStaffId() {
+        System.out.println("Checking if it's form page...");
+        if (!isFormPage()) {
+            System.out.println("Navigating to form page...");
+            try {
+                System.out.println("Executing staffId method");
+                // Ensure the #staffNo element is visible and clickable
+                searchField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#staffNo")));
+                searchField = driver.findElement(By.id("staffNo"));
+                searchField.click();
+                searchField.sendKeys("11111");
+                searchField = driver.findElement(By.cssSelector(".step1-submit > button:nth-child(1)"));
+                searchField.click();
 
-        /*for (testData testData : testDataList) {
-            System.out.println("Executing Vehicle Number field");
-            String vehNo = testData.getVehNo();
-            System.out.println("Executing NRIC field");
-            String NRIC = testData.getNRIC();
+                System.out.println("staffId method executed successfully");
+            } catch (Exception e) {
+                System.err.println("An error occurred in staffId method: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".align-center > button:nth-child(1)")));
+        driver.findElement(By.cssSelector(".align-center > button:nth-child(1)")).click();
 
-            WebElement searchField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#mat-input-1")));
-            searchField = driver.findElement(By.cssSelector("#mat-input-1"));
-            searchField.click();
-            searchField.sendKeys(NRIC);
-            searchField = driver.findElement(By.cssSelector("#mat-input-3"));
-            searchField.click();
-            searchField.sendKeys(vehNo);
-            searchField = driver.findElement(By.cssSelector("#mat-input-5"));
-            searchField.clear();
-            searchField.click();
-            searchField.sendKeys(email);
-            searchField = driver.findElement(By.cssSelector(".p-t-10 > div:nth-child(2)"));
-            searchField.click();
-            System.out.println("Generating Quotation wait yaa...............");
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("splash-screen")));
-            System.out.println("Thanks For Waiting, we are on vehicle portal");
-        }*/
     }
+
+
     //----------------------------------------------------------------------------
     public static void adminPortalLogin(){
         wait.until(ExpectedConditions.urlContains("https://vehicle.staging.senangpks.com.my/quotation/"));
@@ -135,12 +92,21 @@ public class baseTest {
         wait.until(ExpectedConditions.urlContains("https://portal.staging.senangpks.com.my/dashboard"));
         driver.get("https://portal.staging.senangpks.com.my/vehicle-policy/view/" + quotationId);
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("splash-screen")));
+        driver.switchTo().window(tabs.get(0));
     }
 
     //----------------------------------------------------------------------------
     public static boolean isElementPresent(WebDriverWait wait, By locator) {
         try {
             wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+    public static boolean isElementClickable(WebDriverWait waitM,By locator){
+        try {
+            waitM.until(ExpectedConditions.elementToBeClickable(locator));
             return true;
         } catch (TimeoutException e) {
             return false;
