@@ -103,7 +103,9 @@ public class STM_addOnLogic extends baseTest{
             searchField.sendKeys(SrecommendedValueWS);
         });
         Allure.step("Step 2: Add to certificate", () -> {
-            driver.findElement(By.xpath("//input[@formcontrolname='windshield']/ancestor::div[contains(@class, 'col-xl-5 col-lg-6 col-md-5 col-sm-12 p-tb-10 bg-light-grey')]//button[span[contains(text(), 'Add to certificate')]]\n")).click();
+            driver.findElement(By.xpath
+                    ("//input[@formcontrolname='windshield']/ancestor::div[contains(@class, 'col-xl-5 col-lg-6 col-md-5 col-sm-12 p-tb-10 bg-light-grey')]//button[span[contains(text(), 'Add to certificate')]]\n"))
+                    .click();
 
         });
         Allure.step("Step 3:Update Quotation", () -> {
@@ -193,7 +195,7 @@ public class STM_addOnLogic extends baseTest{
         for(String addOn : supportedAddOnList){
             Allure.step("Verify " + addOn + " supported by STM can be added", () -> {
                 // Step 2 logic here
-                presence = isElementPresent(wait,By.xpath("//div[p[contains(text(), 'Add On :')]]//p[contains(text(), '"+addOn+"')]\n"));
+                presence = isElementPresent(shortWait,By.xpath("//div[p[contains(text(), 'Add On :')]]//p[contains(text(), '"+addOn+"')]\n"));
                 if (!presence) {
                     Allure.step("Error/bug occured for add on: " + addOn, Status.FAILED);
                     TakesScreenshot screenshotDriver = (TakesScreenshot) driver;

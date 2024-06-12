@@ -32,11 +32,16 @@ public class STM_addOnTest extends STM_addOnLogic{
     @Description("Theres a bug when adding addOn, covertype will change from comprehensive to tpft")
     @Severity(SeverityLevel.BLOCKER)
     void eachTestEnded(){
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         verifyCoverTypeBehaviour();
     }
     @AfterAll
     public static void ended(){
-        //next();
+        next();
     }
     //STM
     @Test
@@ -61,7 +66,6 @@ public class STM_addOnTest extends STM_addOnLogic{
     @Tag("WS")
     @DisplayName("Verify Maximum value for windscreen")
     @Description("This test will insert value lower than minimum value which is WS sumcovered + (WS sumcovered * 30%).If validation error message appear.it success")
-
     public void winShieldMaxValue(){
         maxValue();
         //This test will insert value more than maximum value.If validation error message appear.it success
@@ -96,7 +100,7 @@ public class STM_addOnTest extends STM_addOnLogic{
     @Order(7)
     @DisplayName("IOSP")
     @Description("Add IOSP to certificate and verify its diplayed on premium summary")
-    @Disabled
+
     public void IOSP(){
        addIOSP();
     }
