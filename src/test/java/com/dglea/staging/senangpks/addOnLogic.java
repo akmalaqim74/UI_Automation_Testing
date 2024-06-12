@@ -17,11 +17,11 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class STM_addOnLogic extends baseTest{
+public class addOnLogic extends baseTest{
     public static double recommendedValueWS;
     public static boolean presence;
     public boolean clickable;
-    static ArrayList<String> supportedAddOnList = new ArrayList<>();
+
     //beforeAll
     @Step
     @DisplayName("Get Recommended Value for WS")
@@ -51,7 +51,6 @@ public class STM_addOnLogic extends baseTest{
             presence = isElementPresent(shortWait,By.xpath("//button[span[contains(text(), 'Update Quotation Pricing')]]\n"));
             if (!presence) {
                 Allure.step("cant update quotation", Status.FAILED);
-            } else {
             }
         });
         Allure.step("Step 2: update Quote and verify add on displayed on summary", () -> {
@@ -60,11 +59,14 @@ public class STM_addOnLogic extends baseTest{
                 wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("circle.ng-star-inserted")));
                 Allure.step("Verify addon is display");
                 presence = isElementPresent(wait,By.xpath("//div[p[contains(text(), 'Add On :')]]//p[contains(text(), '"+addOnName+"')]\n"));
-                if(presence){
-                    addOn.add(addOnName);
+                searchField = driver.findElement(By.cssSelector("p.justify-content-center"));
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", searchField);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 assertTrue(presence);
-            } else {
             }
         });
 
@@ -111,6 +113,16 @@ public class STM_addOnLogic extends baseTest{
         Allure.step("Step 3:Update Quotation", () -> {
             // Step 1 logic here
             updateQuote("Cover for Windscreens, Windows and Sunroof");
+        });
+    }
+    public void addSRCP(){
+        Allure.step("Step 1: ADD to certificate", () -> {
+            searchField = driver.findElement(By.cssSelector("div.box-shadow:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > button:nth-child(1)"));
+            searchField.click();
+        });
+        Allure.step("Step 2:Update Quotation", () -> {
+            // Step 1 logic here
+            updateQuote("Strike, Riot & Civil Commotion");
         });
     }
     public void addLLOP(){
@@ -182,16 +194,11 @@ public class STM_addOnLogic extends baseTest{
         });
         Allure.step("Step 3:Update Quotation", () -> {
             // Step 1 logic here
-            updateQuote("Towing and Cleaning due to Water Damage");
+            updateQuote("MOTOR PA PLUS");
         });
     }
 
     public void supportedAddOn(){
-        try {
-            supportedAddOnList = sheetHelper.supportedAddOnSTM();
-        } catch (IOException e) {
-            e.printStackTrace(); // Or handle the exception in some appropriate way
-        }
         for(String addOn : supportedAddOnList){
             Allure.step("Verify " + addOn + " supported by STM can be added", () -> {
                 // Step 2 logic here
@@ -214,7 +221,7 @@ public class STM_addOnLogic extends baseTest{
             boolean tempCoverType;
             tempCoverType = coverType.equalsIgnoreCase( driver.findElement(By.xpath("//div[@class='p-tb-10 pl-5 pr-5 ng-star-inserted']/p[@class='text f600 black m-b-10' and contains(text(), 'Comprehensive')]\n")).getText());
             if (!tempCoverType) {
-                Allure.step("Bug on coverType during addOn: " + addOn, Status.FAILED);
+                Allure.step("Bug on coverType during addOn", Status.FAILED);
                 TakesScreenshot screenshotDriver = (TakesScreenshot) driver;
                 byte[] screenshot = screenshotDriver.getScreenshotAs(OutputType.BYTES);
                 Allure.addAttachment("Cover Type change from " + coverType + " to " +
@@ -227,5 +234,61 @@ public class STM_addOnLogic extends baseTest{
                 Allure.step("Cover Type remains the same", Status.PASSED);
             }
         });
+    }
+    public boolean disabledWS(){
+        if(supportedAddOnList.contains("Cover for Windscreens, Windows and Sunroof")){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    public boolean disabledSRCP(){
+        if(supportedAddOnList.contains("Strike, Riot & Civil Commotion")){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    public boolean disabledLLOP(){
+        if(supportedAddOnList.contains("Legal Liability of Passengers for Negligence Acts")){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    public boolean disabledLLTP(){
+        if(supportedAddOnList.contains("Legal Liability to Passengers")){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    public boolean disabledIOSP(){
+        if(supportedAddOnList.contains("Inclusion of Special Perils")){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    public boolean disabledPAPLUS(){
+        if(supportedAddOnList.contains("MOTOR PA PLUS")){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    public boolean disabledTowing(){
+        if(supportedAddOnList.contains("Towing and Cleaning due to Water Damage")){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    public boolean disabledAllDriver(){
+        if(supportedAddOnList.contains("All Drivers")){
+            return false;
+        }else{
+            return true;
+        }
     }
 }

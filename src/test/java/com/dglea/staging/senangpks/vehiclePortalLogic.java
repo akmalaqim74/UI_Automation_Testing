@@ -10,17 +10,21 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class vehiclePortalLogic extends baseTest{
     static Boolean presenceC,presenceT,presence;
     public static String vehNo,NRIC;
+    static double tempBasicContribution;
+    static int i;
 
     @Step("Generate Quote Using test data")
     public static void generateQuote(){
         System.out.println("Checking if vehicle Portal......");
-        if (!isVehiclePortal()) {
+        while (!isVehiclePortal()) {
             int testDataSize = testDataList.size();
-            for(int i = 0; i< testDataSize; i++){
+            for( i = 0; i< testDataSize; i++){
                 String data = testDataList.get(i);
                 String[] parts = data.split(",");
                 System.out.println("Count: " + i + " \nData: "+data);
@@ -37,7 +41,7 @@ public class vehiclePortalLogic extends baseTest{
                     searchField = driver.findElement(By.cssSelector("#mat-input-2"));
                     searchField.click();
                     searchField.clear();
-                    searchField.sendKeys("Mal Test");
+                    searchField.sendKeys(name);
                     //vehicle number field
                     searchField = driver.findElement(By.cssSelector("#mat-input-3"));
                     searchField.click();
@@ -47,12 +51,17 @@ public class vehiclePortalLogic extends baseTest{
                     searchField = driver.findElement(By.cssSelector("#mat-input-4"));
                     searchField.click();
                     searchField.clear();
-                    searchField.sendKeys("58000");
+                    searchField.sendKeys(postcode);
                     //Email Field
                     searchField = driver.findElement(By.cssSelector("#mat-input-5"));
                     searchField.clear();
                     searchField.click();
-                    searchField.sendKeys("akmalmustaqimsenang@gmail.com");
+                    searchField.sendKeys(email);
+                    //once used remove test data from list
+                    testDataList.remove(i);
+                    for(String temp : testDataList){
+                        System.out.println("Testdata latest: " + temp);
+                    }
                 });
 
                 Allure.step("2. Generate Quotation", () -> {
@@ -65,7 +74,7 @@ public class vehiclePortalLogic extends baseTest{
 
                     if (presence) {
                         Allure.step("Generate Quote Failed", Status.FAILED);
-                        System.out.println("Handle cant generate quote data");
+                        System.out.println("Handle if cant generate quote data");
                         tempWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("cdk-overlay-0")));
                         TakesScreenshot screenshotDriver = (TakesScreenshot) driver;
                         byte[] screenshot = screenshotDriver.getScreenshotAs(OutputType.BYTES);
@@ -79,20 +88,54 @@ public class vehiclePortalLogic extends baseTest{
                         System.out.println("Generating Quotation wait yaa...............");
                         wait.until(ExpectedConditions.urlContains("https://vehicle.staging.senangpks.com.my/quotation"));
                         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("splash-screen")));
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         System.out.println("Thanks For Waiting, we are on vehicle portal");
+                        Allure.step("Step 3.1: Verify provider is available", () -> {
+                            // Step 2 logic here
+                            choosingProvider();
+                            boolean isPopupPresent = isElementPresent(shortWait, By.tagName("mat-dialog-container"));
+                            if (isPopupPresent) {
+                                Allure.step("Generate Quote Failed, repeat from landing Page", Status.FAILED);
+                                TakesScreenshot screenshotDriver = (TakesScreenshot) driver;
+                                byte[] screenshot = screenshotDriver.getScreenshotAs(OutputType.BYTES);
+                                Allure.addAttachment("Generate Quote failed, need to repeat from landing page", new ByteArrayInputStream(screenshot));
+                                driver.get("https://dglea.staging.senangpks.com.my/");
+                                Allure.step("Step 1: Insert Staff Id", () -> {
+                                    insertStaffId();
+                                });
+                                //temporary solution
+                            }else {
+                                Allure.step("Step 3.2: Verify provider basic contribution is not RM 0.00", () -> {
+                                    // Step 2 logic here
+                                    choosingProvider();
+                                    searchField = driver.findElement(By.xpath("//div[contains(@class, 'd-flex m-b-5') and p[contains(text(), 'Basic Contribution (Market Value)')]]/p[contains(text(), 'RM')]\n"));
+                                    tempBasicContribution = Double.parseDouble(searchField.getText().replace("RM", "").replace(",", "").trim());
+                                    if (tempBasicContribution < 11) {
+                                        Allure.step("Generate Quote Failed, repeat from landing Page", Status.FAILED);
+                                        TakesScreenshot screenshotDriver = (TakesScreenshot) driver;
+                                        byte[] screenshot = screenshotDriver.getScreenshotAs(OutputType.BYTES);
+                                        Allure.addAttachment("Generate Quote failed, need to repeat from landing page", new ByteArrayInputStream(screenshot));
+                                        driver.get("https://dglea.staging.senangpks.com.my/");
+                                        Allure.step("Step 1: Insert Staff Id", () -> {
+                                            insertStaffId();
+                                             });
+                                        //temporary solution
+                                    }else {
+                                        Allure.step("Generate Quote Successful", Status.PASSED);
+                                        i = testDataSize -1;
+                                    }
+                                });
+                            }
+                        });
 
                     }
                 });
-                if(driver.getCurrentUrl().contains("https://vehicle.staging.senangpks.com.my/quotation")){
-                    i = testDataSize -1;
-                }else{
-                    //working on to remove data from excel if generate quote failed for the test data
-                }
             }
 
-        }
-        else{
-            System.out.println("Already in vehicle Portal?");
         }
     }
     public boolean isComprehensive(){
@@ -207,19 +250,8 @@ public class vehiclePortalLogic extends baseTest{
         }
     }
     @Step("Choosing Takaful Malaysia as provider")
-    @Description("Lets just break all test for now if takaful malaysia not available")
-    public static void choosingSTM(){
-        for (String provider : availableProvider) {
-            System.out.println(provider);
-            if (provider.equals("takaful_malaysia")) {
-                System.out.println("Successful in");
-                driver.findElement(By.xpath("//img[@src='https://senang1.sgp1.digitaloceanspaces.com/public/assets/insurance_provider/takaful_malaysia_logo.svg']\n")).click();
-                break;
-            } else {
-                //driver.get("https://lh6.googleusercontent.com/Bu-pRqU_tWZV7O3rJ5nV1P6NjqFnnAs8kVLC5VGz_Kf7ws0nDUXoGTc7pP87tyUCfu8VyXi0YviIm7CxAISDr2lJSwWwXQxxz98qxVfMcKTJfLPqbcfhn-QEeOowjrlwX1LYDFJN");
-                driver.findElement(By.xpath("//img[@src='https://senang1.sgp1.digitaloceanspaces.com/public/assets/insurance_provider/" + provider + "_logo.svg']\n")).click();
-            }
-        }
+    public static void choosingProvider(){
+        driver.findElement(By.xpath("//img[@src='https://senang1.sgp1.digitaloceanspaces.com/public/assets/insurance_provider/"+ provider+"_logo.svg']\n")).click();
     }
 
     public  static void providerList(){
@@ -259,7 +291,6 @@ public class vehiclePortalLogic extends baseTest{
                 e.printStackTrace();
             }
         }
-
     }
     //========================================================================================
     private static String extractProviderName(String url) {

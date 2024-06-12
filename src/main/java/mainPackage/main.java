@@ -1,3 +1,9 @@
+package mainPackage;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.apache.commons.io.FileUtils;
 
 import javax.activation.DataHandler;
@@ -8,33 +14,70 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Properties;
 
 public class main {
-    static int skipped,errors,failures,testsRun;
+    static int skipped,broken,failures,testsRun;
     static String allureReportPath;
+
     public static void main(String[] args) throws IOException{
         allureHandler();
         String[] mavenCommand = {"cmd.exe", "/c", "mvn", "clean", "test" ,"-Dtest=testSuite"};
         executeCommands(mavenCommand);
-        System.out.println("testsRun: " + testsRun);
-        System.out.println("failures" + failures);
-        System.out.println("errors" + errors);
-        System.out.println("skipped: " + skipped);
-        String[] allureCommand = { "cmd.exe", "/c", "allure", "generate", "--single-file", "target\\allure-results"};
-
+        String[] allureCommand = { "cmd.exe", "/c", "allure", "generate", "allure-results", "-o","allure-reports"};
         executeCommands(allureCommand);
+        getTestResult();
+        String[] allureCommandSingleReport = { "cmd.exe", "/c", "allure", "generate", "--single-file", "allure-results"};
+        executeCommands(allureCommandSingleReport);
         renameAllureReport();
-        sendEmailWithAttachment();
+        if(failures > 0){
+            sendEmailWithAttachment("akmalaqim74@gmail.com,qalead@senang.io","The test suite has finished executing with ERRORS. Please find the Allure report attached.");
+        }
+        if(broken > 0 || skipped > 0)
+            sendEmailWithAttachment("akmalmustaqimsenang@gmail.com,qalead@senang.io","The test suite has finished executing with BROKEN || skipped || no issues test. Please find the Allure report attached.");
+    }
+
+    public static void getTestResult(){
+        try {
+            // Get the current working directory
+            String currentDir = System.getProperty("user.dir");
+            String filePath = currentDir + "\\allure-reports\\history\\history-trend.json";
+
+            // Read the JSON file
+            JsonElement jsonElement = JsonParser.parseReader(new FileReader(filePath));
+
+            // Check if the root element is an array
+            if (jsonElement.isJsonArray()) {
+                JsonArray jsonArray = jsonElement.getAsJsonArray();
+                // Assuming there's only one element in the array
+                JsonObject jsonObject = jsonArray.get(0).getAsJsonObject();
+
+                // Get the "data" object
+                JsonObject dataObject = jsonObject.getAsJsonObject("data");
+
+                // Get the values and assign them to the variables
+                skipped = dataObject.get("skipped").getAsInt();
+                broken = dataObject.get("broken").getAsInt();
+                failures = dataObject.get("failed").getAsInt();
+                testsRun = dataObject.get("passed").getAsInt();
+
+                // Print the values for verification
+                System.out.println("Skipped: " + skipped);
+                System.out.println("Errors: " + broken);
+                System.out.println("Failures: " + failures);
+                System.out.println("Tests Run: " + testsRun);
+            } else {
+                System.out.println("Root element is not an array.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public static void allureHandler() throws IOException{
 
         String projectRoot = System.getProperty("user.dir");
-        String allureResultsPath = projectRoot + "\\target\\allure-results";
+        String allureResultsPath = projectRoot + "\\allure-results";
         System.out.println("Allure Results Path: " + allureResultsPath);
         File dirFile = new File(allureResultsPath);
         if(dirFile.exists()){
@@ -50,47 +93,32 @@ public class main {
         }else{
             System.out.println("allure report not exist");
         }
+
+        String allureReportsPath = projectRoot + "\\allure-reports";
+        System.out.println("Allure Results Path: " + allureResultsPath);
+        File reportsDir = new File(allureReportsPath);
+        if(reportsDir.exists()){
+            FileUtils.deleteDirectory(reportsDir);
+        }else{
+            System.out.println("allure-reports not exist");
+        }
     }
     private static void executeCommands(String[] commands) {
         // Initialize ProcessBuilder
         ProcessBuilder processBuilder = new ProcessBuilder(commands);
         processBuilder.redirectErrorStream(true);
-
         try {
             // Start the process
             Process process = processBuilder.start();
             String line;
             // Read output and error streams
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            while ((line = reader.readLine()) != null){
+                System.out.println(line);
+            }
             BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
             while ((line = errorReader.readLine()) != null) {
                 System.err.println(line);
-            }
-            while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
-
-                    // Parse test results
-                    if (line.startsWith("[WARNING] Tests run: ")) {
-                        String[] parts = line.split(",");
-                        for (String part : parts) {
-                            if (part.trim().startsWith("[WARNING] Tests run: ")) {
-                                testsRun = Integer.parseInt(part.trim().substring(21).trim());
-                            } else if (part.trim().startsWith("Failures: ")) {
-                                failures = Integer.parseInt(part.trim().substring(10).trim());
-                            } else if (part.trim().startsWith("Errors: ")) {
-                                errors = Integer.parseInt(part.trim().substring(8).trim());
-                            } else if (part.trim().startsWith("Skipped: ")) {
-                                skipped = Integer.parseInt(part.trim().substring(9).trim());
-                            }
-                        }
-                    }
-                // Wait for the process to complete
-                int exitCode = process.waitFor();
-                if (exitCode == 0) {
-                    System.out.println("Maven commands executed successfully.");
-                } else {
-                    System.out.println("Failed to execute Maven commands. Exit code: " + exitCode);
-                }
             }
             // Wait for the process to complete
             int exitCode = process.waitFor();
@@ -104,6 +132,7 @@ public class main {
         }
     }
     public static void renameAllureReport() throws IOException {
+
         String projectRoot = System.getProperty("user.dir");
         File indexFile = new File(projectRoot + "\\allure-report\\index.html");
         File renamedFile = new File(projectRoot + "\\allure-report\\allure_report.html");
@@ -117,7 +146,7 @@ public class main {
             System.out.println("index.html does not exist.");
         }
     }
-    public static void sendEmailWithAttachment() {
+    public static void sendEmailWithAttachment(String sendTo,String msg) {
         // Set up email properties
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
@@ -141,7 +170,7 @@ public class main {
             message.setFrom(new InternetAddress("akmalmustaqimsenang@gmail.com"));
 
             // Set To: header field of the header
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("akmalaqim74@gmail.com"));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sendTo));
 
             // Set Subject: header field
             message.setSubject("Test Report: Allure Report");
@@ -150,7 +179,7 @@ public class main {
             BodyPart messageBodyPart = new MimeBodyPart();
 
             // Now set the actual message
-            messageBodyPart.setText("The test suite has finished executing with errors. Please find the Allure report attached.");
+            messageBodyPart.setText(msg);
 
             // Create a multipart message
             Multipart multipart = new MimeMultipart();
@@ -173,7 +202,7 @@ public class main {
             // Send message
             Transport.send(message);
 
-            System.out.println("Sent message successfully....");
+            System.out.println("Sent message successfully.... to " + sendTo);
 
         } catch (MessagingException e) {
             e.printStackTrace();

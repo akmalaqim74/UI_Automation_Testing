@@ -13,6 +13,11 @@ public class screenShotHelper extends baseTest implements TestWatcher {
     @Override
     public void testFailed(ExtensionContext context, Throwable cause) {
         if (driver instanceof TakesScreenshot) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             TakesScreenshot screenshotDriver = (TakesScreenshot) driver;
             byte[] screenshot = screenshotDriver.getScreenshotAs(OutputType.BYTES);
             Allure.addAttachment("Test Failure Screenshot", new ByteArrayInputStream(screenshot));

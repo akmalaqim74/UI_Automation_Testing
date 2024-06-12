@@ -1,5 +1,7 @@
 package com.dglea.staging.senangpks;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -20,11 +22,12 @@ public class webDriverManager {
         if (driver == null) {
             WebDriverManager.firefoxdriver().setup();
             FirefoxOptions options = new FirefoxOptions();
-            options.setLogLevel(FirefoxDriverLogLevel.TRACE);
+            //options.setLogLevel(FirefoxDriverLogLevel.TRACE);
             driver = new FirefoxDriver(options);
             driver.manage().window().maximize();
             driver.get("https://dglea.staging.senangpks.com.my/");
             wait = new WebDriverWait(driver, Duration.ofSeconds(50));
+
         }
         return driver;
     }

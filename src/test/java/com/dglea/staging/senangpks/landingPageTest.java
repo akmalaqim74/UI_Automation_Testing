@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Epic("Landing Page")
 @Story("As User, sometimes I missed out to fill in certain field")
-@Tag("Field Validation")
-@DisplayName("Landing Page")
+@Tag("Field `Validation")
+@DisplayName("1.Landing Page")
 @Owner("Intern Akmal")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class landingPageTest extends baseTest {

@@ -1,23 +1,20 @@
 package com.dglea.staging.senangpks;
 
 import io.qameta.allure.*;
-import io.qameta.allure.model.Status;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.DisabledIf;
+import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.By;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.interactions.Actions;
-
-import java.io.ByteArrayInputStream;
 
 import static junit.framework.Assert.assertTrue;
 
-@Story("Add Additional Coverage  ")
+
 @Owner("Intern Akmal")
-@DisplayName("Add Additional Coverage ")
+@DisplayName("3.Add Additional Coverage ")
+@Story("Add Additional Coverage")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class STM_addOnTest extends STM_addOnLogic{
+public class addOnTest extends addOnLogic {
 
     @BeforeAll
     static void setup(){
@@ -47,15 +44,19 @@ public class STM_addOnTest extends STM_addOnLogic{
     @Test
     @Order(1)
     @DisplayName("Get Wind Screen recommended Value")
+    @DisabledIf (value = "wsMaxAndMin", disabledReason = "Test disabled as provider selected did not support this")
     @Tag("WS")
     void windScreenSumCovered(){
         recommendedValueWS();
     }
 
+
     @Test
     @Order(2)
     @Tag("WS")
     @DisplayName("Verify Minimum value for windscreen")
+
+    @DisabledIf (value = "wsMaxAndMin", disabledReason = "Test disabled as provider selected did not support this")
     @Description("This test will insert value lower than minimum value which is WS sumcovered - (WS sumcovered * 30%).If validation error message appear.it success")
     public void windShieldMinValue(){
         minValue();
@@ -64,6 +65,7 @@ public class STM_addOnTest extends STM_addOnLogic{
     @Test
     @Order(3)
     @Tag("WS")
+    @DisabledIf (value = "wsMaxAndMin", disabledReason = "Test disabled as provider selected did not support this")
     @DisplayName("Verify Maximum value for windscreen")
     @Description("This test will insert value lower than minimum value which is WS sumcovered + (WS sumcovered * 30%).If validation error message appear.it success")
     public void winShieldMaxValue(){
@@ -71,11 +73,13 @@ public class STM_addOnTest extends STM_addOnLogic{
         //This test will insert value more than maximum value.If validation error message appear.it success
         assertTrue(presence);
     }
+
     @Test
     @Order(4)
     @DisplayName("WindShield")
     @Description("Add Windshield to certificate and verify its diplayed on premium summary")
     @Tag("WS")
+    @DisabledIf(value = "disabledWS", disabledReason = "Test disabled as provider selected did not support this")
     public void windShield(){
         //addWindScreen to summary
         addWS();
@@ -83,44 +87,61 @@ public class STM_addOnTest extends STM_addOnLogic{
     }
     @Test
     @Order(5)
-    @DisplayName("LLOP")
-    @Description("Add LLOP to certificate and verify its diplayed on premium summary")
-
-    public void LLOP(){
-        addLLOP();
+    @DisplayName("Strike, Riot & Civil Commotion")
+    @Description("Add SRCP to certificate and verify its diplayed on premium summary")
+    @Tag("SRCP")
+    @DisabledIf(value = "disabledSRCP", disabledReason = "Test disabled as provider selected did not support this")
+    void SRCP(){
+        addSRCP();
     }
     @Test
     @Order(6)
+    @DisplayName("LLOP")
+    @Description("Add LLOP to certificate and verify its diplayed on premium summary")
+    @DisabledIf(value = "disabledLLOP", disabledReason = "Test disabled as provider selected did not support this")
+    public void LLOP(){
+        addLLOP();
+    }
+
+    @Test
+    @Order(7)
     @DisplayName("LLTP")
     @Description("Add LLTP to certificate and verify its diplayed on premium summary")
+    @DisabledIf(value = "disabledLLTP", disabledReason = "Test disabled as provider selected did not support this")
     public void LLTP(){
         addLLTP();
     }
+
     @Test
-    @Order(7)
+    @Order(8)
     @DisplayName("IOSP")
     @Description("Add IOSP to certificate and verify its diplayed on premium summary")
-
+    @DisabledIf(value = "disabledIOSP", disabledReason = "Test disabled as provider selected did not support this")
     public void IOSP(){
        addIOSP();
     }
+
     @Test
-    @Order(7)
+    @Order(9)
     @DisplayName("Towing and Cleaning due to Water Damage")
     @Description("Add Towing to certificate and verify its diplayed on premium summary")
+    @DisabledIf(value = "disabledTowing", disabledReason = "Test disabled as provider selected did not support this")
     public void towingPlan1(){
         addTowingPlan1();
     }
+
     @Test
-    @Order(8)
+    @Order(10)
     @DisplayName("Pa Plus Add On")
     @Description("Add Pa Plus to certificate and verify its diplayed on premium summary")
+    @DisabledIf(value = "disabledPAPLUS", disabledReason = "Test disabled as provider selected did not support this")
     void PaPlus(){
         paPlus();
 
     }
+
     @Test
-    @Order(9)
+    @Order(11)
     @DisplayName("Verify supported add on by STM")
     @Description("We need to verify all the add on supported by STM can be added into premium summary")
     @Severity(SeverityLevel.CRITICAL)

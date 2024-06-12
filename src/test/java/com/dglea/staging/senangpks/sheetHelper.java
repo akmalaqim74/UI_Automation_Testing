@@ -12,7 +12,7 @@ import java.util.Iterator;
 public class sheetHelper {
 
     public static void main(String[] args) throws IOException {
-        ArrayList<String> dataList = supportedAddOnSTM();
+        ArrayList<String> dataList = supportedAddOn("takaful_malaysia");
 
         for(String data : dataList) {
             System.out.println(data);
@@ -81,7 +81,7 @@ public class sheetHelper {
 
         return list;
     }
-    public static ArrayList<String> supportedAddOnSTM() throws IOException {
+    public static ArrayList<String> supportedAddOn(String providerName) throws IOException {
         ArrayList<String> list = new ArrayList<String>();
         System.out.println("Excel Reader");
 
@@ -97,7 +97,7 @@ public class sheetHelper {
 
         for(int i=0;i<sheetcount;i++) {
             System.out.println("Going for Loop");
-            if(wb.getSheetName(i).equals("STM_ADDON")) {
+            if(wb.getSheetName(i).contains(providerName)) {
                 System.out.println("Successful find testData sheet");
                 XSSFSheet sheet = wb.getSheetAt(i);
                 Iterator<Row> rows = sheet.iterator();

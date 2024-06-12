@@ -2,6 +2,7 @@ package com.dglea.staging.senangpks;
 
 import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.DisabledIf;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -12,9 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Epic("Get Quotation Section")
 @Story("As a user, I want to view my vehicle details")
-@DisplayName("Get Quotation Section")
+@DisplayName("2.Vehicle Portal(Get Quotation)")
 @Owner("Intern Akmal")
-
 public class vehiclePortalTest extends vehiclePortalLogic {
     @AfterAll
     public static void ended() {
@@ -25,14 +25,16 @@ public class vehiclePortalTest extends vehiclePortalLogic {
     @Test
     @Order(1)
     @DisplayName("Generate Quote")
-    @Description("Generate a quote using data from excel\n STM provider will be choose and admin portal will be open")
+    @Description("Generate a quote using data from excel\n  provider will be choose and admin portal will be open.\n" +
+            "If provider selected is not available, we will generate quotation again. " +
+            "If provider basic contribution == 0, we will generate quote again")
     void generateQuotation(){
         generateQuote();
-        adminPortalLogin();
-        providerList();
-        System.out.println("Finding Provider ended");
-        System.out.println("Available Providers:");
-        choosingSTM();
+        //adminPortalLogin(); Can ignore for now, im not trying to validate against this
+        /*providerList();
+        This can be used to find out what available provider this testdata got, the reason I comment because
+        this method making the test slow
+         */
     }
 
 
@@ -49,6 +51,7 @@ public class vehiclePortalTest extends vehiclePortalLogic {
 
     @Test
     @Order(3)
+    @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Verify Comprehensive is supported")
     @Description("Choose comprehensive then update the quote, validate whether Premium summary will show comprehensive")
     public void isComprehensiveTest() {
@@ -60,6 +63,8 @@ public class vehiclePortalTest extends vehiclePortalLogic {
     @Order(4)
     @DisplayName("Verify TPFT is supported")
     @Description("Choose comprehensive then update the quote, validate whether Premium summary will show TPFT")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisabledIf (value = "conditionVehiclePortal", disabledReason = "Test disabled as provider selected did not support this")
     public void isTPFTAvailableTest() {
         assertTrue(isTPFT());
         //assertTrue(driver.findElement(By.xpath("//div[@class='p-tb-10 pl-5 pr-5 ng-star-inserted']//p[@class='text f600 black m-b-10' and contains(text(), 'Third Party Fire & Theft')]\n")).isDisplayed());
@@ -73,6 +78,7 @@ public class vehiclePortalTest extends vehiclePortalLogic {
 
     @RegisterExtension
     screenShotHelper screenshot = new screenShotHelper();
+
 
 }
 

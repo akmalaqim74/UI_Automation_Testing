@@ -1,6 +1,5 @@
 package com.dglea.staging.senangpks;
 
-import io.qameta.allure.Step;
 import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -9,7 +8,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.List;
 
 public class baseTest {
     protected static WebDriver driver;
@@ -18,12 +16,15 @@ public class baseTest {
     protected static String coverType;
     static ArrayList<String> availableProvider = new ArrayList<>();
     static ArrayList<String> NotAvailableProvider = new ArrayList<>();
-    static ArrayList<String> addOn = new ArrayList<>();
     public static  ArrayList<String> testDataList = new ArrayList<>();
+    static ArrayList<String> supportedAddOnList = new ArrayList<>();
+    public static String name,email,postcode;
+    public static String provider;
 
     @BeforeAll
     public static void setUpClass() {
         driver = webDriverManager.getDriver();
+        ((JavascriptExecutor) driver).executeScript("document.body.style.zoom='70%'");
         wait = webDriverManager.getWait();
         shortWait = webDriverManager.getShortWait();
         tempWait = webDriverManager.getTempWait();
@@ -32,8 +33,47 @@ public class baseTest {
         } catch (IOException e) {
             e.printStackTrace(); // Or handle the exception in some appropriate way
         }
-
+        personalInfo();
+        provider();
+        try {
+            supportedAddOnList = sheetHelper.supportedAddOn(provider);
+        } catch (IOException e) {
+            e.printStackTrace(); // Or handle the exception in some appropriate way
+        }
     }
+    static void personalInfo(){
+        name = "Mal Testing";
+        email = "akmalmustaqimsenang@gmail.com";
+        postcode = "58000";
+    }
+    static void provider(){
+        /* just copy one of this
+        chubb
+        takaful_ikhlas
+        takaful_malaysia
+        aig
+        zurich
+        zurich_general
+        etiqa
+        msig
+         */
+        //provider = "chubb";
+        provider = "takaful_malaysia";
+    }
+    public boolean conditionVehiclePortal(){
+        if(provider.equals("takaful_malaysia"))
+            return true;
+        else
+            return false;
+    }
+    public boolean wsMaxAndMin(){
+        if(provider.equals("takaful_malaysia"))
+            return false;
+        else
+            return true;
+    }
+
+
 
 
     public static void insertStaffId() {
