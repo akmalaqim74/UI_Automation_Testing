@@ -7,6 +7,8 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class screenShotHelper extends baseTest implements TestWatcher {
 
@@ -20,7 +22,21 @@ public class screenShotHelper extends baseTest implements TestWatcher {
             }
             TakesScreenshot screenshotDriver = (TakesScreenshot) driver;
             byte[] screenshot = screenshotDriver.getScreenshotAs(OutputType.BYTES);
-            Allure.addAttachment("Test Failure Screenshot", new ByteArrayInputStream(screenshot));
+            // Get the test display name
+            String projectRoot = System.getProperty("user.dir");
+            String testName = context.getDisplayName();
+            saveScreenshotToFile(screenshot,projectRoot + "\\failed-testcases\\"+testName + ".png");
+            Allure.addAttachment(testName, new ByteArrayInputStream(screenshot));
+        }
+
+    }
+    private void saveScreenshotToFile(byte[] screenshot, String screenshotFileName) {
+        try (FileOutputStream fos = new FileOutputStream(screenshotFileName)) {
+            fos.write(screenshot);  // Write the byte array (screenshot) to the file
+        } catch (IOException e) {
+            e.printStackTrace();  // Handle any IO exceptions (e.g., file not found, permission denied)
         }
     }
+
+
 }

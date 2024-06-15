@@ -35,6 +35,13 @@
             <version>4.0.0</version>
         </dependency>
 
+        <!-- zip folder -->
+        <dependency>
+            <groupId>org.zeroturnaround</groupId>
+            <artifactId>zt-zip</artifactId>
+            <version>1.15</version>
+        </dependency>
+
         <!-- SLF4J -->
         <dependency>
             <groupId>org.slf4j</groupId>

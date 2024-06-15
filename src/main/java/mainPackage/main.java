@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.io.FileUtils;
+import org.zeroturnaround.zip.ZipUtil;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -20,22 +21,49 @@ import java.util.Properties;
 public class main {
     static int skipped,broken,failures,testsRun;
     static String allureReportPath;
+    static String[] mavenCommand = {"cmd.exe", "/c", "mvn", "clean", "test" ,"-Dtest=testSuite"};
+    static String[] allureCommand = { "cmd.exe", "/c", "allure", "generate", "allure-results", "-o","allure-reports"};
+    static String[] allureCommandSingleReport = { "cmd.exe", "/c", "allure", "generate", "--single-file", "allure-results"};
+    static String errorReceiver = "akmalaqim74@gmail.com";
+    static String errorMessage = "The test suite has finished executing with ERRORS. Please find the Allure report attached." ;
+    static String defaultReceiver = "akmalmustaqimsenang@gmail.com";
+    static String defaultMsg = "The test suite has finished executing with BROKEN || skipped || no issues test. Please find the Allure report attached.";
 
     public static void main(String[] args) throws IOException{
+        runAll();
+
+    }
+
+    public static void runAll() throws IOException{
         allureHandler();
-        String[] mavenCommand = {"cmd.exe", "/c", "mvn", "clean", "test" ,"-Dtest=testSuite"};
+        failedTestCases();
         executeCommands(mavenCommand);
-        String[] allureCommand = { "cmd.exe", "/c", "allure", "generate", "allure-results", "-o","allure-reports"};
         executeCommands(allureCommand);
         getTestResult();
-        String[] allureCommandSingleReport = { "cmd.exe", "/c", "allure", "generate", "--single-file", "allure-results"};
         executeCommands(allureCommandSingleReport);
         renameAllureReport();
         if(failures > 0){
-            sendEmailWithAttachment("akmalaqim74@gmail.com,qalead@senang.io","The test suite has finished executing with ERRORS. Please find the Allure report attached.");
+            //you can send multiple receiver, just example "email,email"
+            sendEmailWithAttachment(errorReceiver,errorMessage);
         }
         if(broken > 0 || skipped > 0)
-            sendEmailWithAttachment("akmalmustaqimsenang@gmail.com,qalead@senang.io","The test suite has finished executing with BROKEN || skipped || no issues test. Please find the Allure report attached.");
+            sendEmailWithAttachment(defaultReceiver,defaultMsg);
+    }
+
+    public static void failedTestCases() throws IOException {
+        //FYI inside allure-reports\\data\\attachments we also have the list of error screenshot, so if you want to use that, up to u
+        String currentDir = System.getProperty("user.dir");
+        String filePath = currentDir + "\\failed-testcases";
+        File directory = new File(filePath);
+        if (!directory.exists()) {
+            System.out.println("Creating new Directory for failed testcases");
+            directory.mkdirs();
+        }else{
+            System.out.println("Delete existing failed testcases");
+            FileUtils.deleteDirectory(directory);
+            System.out.println("Creating new Directory for failed testcases");
+            directory.mkdirs();
+        }
     }
 
     public static void getTestResult(){
@@ -146,7 +174,7 @@ public class main {
             System.out.println("index.html does not exist.");
         }
     }
-    public static void sendEmailWithAttachment(String sendTo,String msg) {
+    public static void sendEmailWithAttachment  (String sendTo,String msg) throws IOException{
         // Set up email properties
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
@@ -176,25 +204,61 @@ public class main {
             message.setSubject("Test Report: Allure Report");
 
             // Create the message part
-            BodyPart messageBodyPart = new MimeBodyPart();
+            BodyPart messageBodyPart1 = new MimeBodyPart();
 
             // Now set the actual message
-            messageBodyPart.setText(msg);
+            messageBodyPart1.setText("Folder of failed screenshot testcases\n For further Details PFA of the report");
 
             // Create a multipart message
             Multipart multipart = new MimeMultipart();
 
             // Set text message part
-            multipart.addBodyPart(messageBodyPart);
+            multipart.addBodyPart(messageBodyPart1);
 
             // Part two is attachment
-            messageBodyPart = new MimeBodyPart();
+            messageBodyPart1 = new MimeBodyPart();
             String projectRoot = System.getProperty("user.dir");
+            String failedTestPath = projectRoot + "\\failed-testcases";
+            File directory = new File(failedTestPath);
+            if (directory.exists() && directory.isDirectory()) {
+                File[] files = directory.listFiles();
+                if (files != null) {
+                    for (File file : files) {
+                        if (file.isFile()) {
+                            MimeBodyPart attachmentPart = new MimeBodyPart();
+                            DataSource fileDataSource = new FileDataSource(file);
+                            attachmentPart.setDataHandler(new DataHandler(fileDataSource));
+                            attachmentPart.setFileName(file.getName());
+                            multipart.addBodyPart(attachmentPart);
+                        }
+                    }
+                }
+            } else {
+                System.err.println("Failed test cases directory does not exist or is not a directory.");
+            }
+            // send attachment using folder
+            /*String zipFilePath = projectRoot + "\\failed-testcases.zip";
+            File tempZip = new File(zipFilePath);
+            if(tempZip.exists()){
+                tempZip.delete();
+            }else{
+                System.out.println("allure-result not exist");
+            }
+            // Compress the directory
+            ZipUtil.pack(new File(failedTestPath), new File(zipFilePath));
+            DataSource source = new FileDataSource(zipFilePath);
+            messageBodyPart1.setDataHandler(new DataHandler(source));
+            messageBodyPart1.setFileName("Failed_testcases.zip");
+            multipart.addBodyPart(messageBodyPart1);
+            */
+            // Add another body part for text content
+            MimeBodyPart messageBodyPart2 = new MimeBodyPart();
+            messageBodyPart2.setText(msg);
             allureReportPath = projectRoot + "\\allure-report";
-            DataSource source = new FileDataSource(allureReportPath + "\\allure_report.html");
-            messageBodyPart.setDataHandler(new DataHandler(source));
-            messageBodyPart.setFileName("allure_report.html");
-            multipart.addBodyPart(messageBodyPart);
+            DataSource source2 = new FileDataSource(allureReportPath + "\\allure_report.html");
+            messageBodyPart2.setDataHandler(new DataHandler(source2));
+            messageBodyPart2.setFileName("allure_report.html");
+            multipart.addBodyPart(messageBodyPart2);
 
             // Send the complete message parts
             message.setContent(multipart);

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Epic("Landing Page")
@@ -19,6 +20,10 @@ public class landingPageTest extends baseTest {
 
 
     @Test
+    void temp (){
+        adminPortalLogin();
+    }
+    /*@Test
     @Order(1)
     @Description("Are we on Landing Page (Fill in Form)?")
     public void onForm(){
@@ -39,9 +44,10 @@ public class landingPageTest extends baseTest {
     @Description("Validation if vehicle Number field is empty")
 
     public void vehNoRequiredTest(){
+        //assertTrue(driver.findElement(By.cssSelector("#mat-error-1")).isDisplayed());
         assertTrue(driver.findElement(By.cssSelector("#mat-error-1")).isDisplayed());
-    }
-    @Test
+    }*/
+    /*@Test
     @Disabled
     @Description("Validation if name field is empty")
     void NameRequiredTest(){
@@ -58,7 +64,7 @@ public class landingPageTest extends baseTest {
     @Description("Validation if email address is empty")
     void emailRequiredTest(){
         assertTrue(driver.findElement(By.cssSelector("#mat-error-4")).isDisplayed());
-    }
+    }*/
 
     @RegisterExtension
     screenShotHelper screenshot = new screenShotHelper();

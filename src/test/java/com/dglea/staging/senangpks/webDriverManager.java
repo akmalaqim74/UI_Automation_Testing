@@ -22,10 +22,11 @@ public class webDriverManager {
         if (driver == null) {
             WebDriverManager.firefoxdriver().setup();
             FirefoxOptions options = new FirefoxOptions();
-            //options.setLogLevel(FirefoxDriverLogLevel.TRACE);
+            options.setLogLevel(FirefoxDriverLogLevel.TRACE);
             driver = new FirefoxDriver(options);
             driver.manage().window().maximize();
-            driver.get("https://dglea.staging.senangpks.com.my/");
+            //driver.get("https://dglea.staging.senangpks.com.my/");
+            driver.get("https://www.google.com/");
             wait = new WebDriverWait(driver, Duration.ofSeconds(50));
 
         }
