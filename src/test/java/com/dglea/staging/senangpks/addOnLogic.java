@@ -48,7 +48,7 @@ public class addOnLogic extends baseTest{
     void updateQuote(String addOnName){
         Allure.step("Step 1: Verify update quotation button exist", () -> {
             // Step 2 logic here
-            presence = isElementPresent(shortWait,By.xpath("//button[span[contains(text(), 'Update Quotation Pricing')]]\n"));
+            presence = isElementPresent(tempWait,By.xpath("//button[span[contains(text(), 'Update Quotation Pricing')]]\n"));
             if (!presence) {
                 Allure.step("cant update quotation", Status.FAILED);
             }
@@ -129,6 +129,10 @@ public class addOnLogic extends baseTest{
         Allure.step("Step 1: ADD to certificate", () -> {
             searchField = driver.findElement(By.cssSelector("div.row:nth-child(3) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > button:nth-child(1)"));
             searchField.click();
+            // cant interact with the elemnt if use xpath, lets just comment it now and figure it out later, probably we can use for loop elements?
+            /*searchField = driver.findElement(By.xpath("//div[contains(@class, 'row m-tb-10 box-shadow ng-star-inserted') and .//p[contains(text(), 'Legal liability of passengers')]]//button[contains(@class, 'btn btn-primary w-100 mat-focus-indicator mat-raised-button mat-button-base ng-star-inserted') and span[contains(text(), 'Add to certificate')]]\n"));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", searchField);
+            searchField.click();*/
         });
         Allure.step("Step 2:Update Quotation", () -> {
             // Step 1 logic here
@@ -137,8 +141,12 @@ public class addOnLogic extends baseTest{
     }
     public void addLLTP(){
         Allure.step("Step 1: ADD to certificate", () -> {
-            driver.findElement(By.xpath("//div[contains(@class, 'row m-tb-10 box-shadow ng-star-inserted') and .//p[contains(text(), 'Legal Liability to Passengers')]]//button[contains(@class, 'btn btn-primary w-100 mat-focus-indicator mat-raised-button mat-button-base ng-star-inserted')]\n")).click();
+            driver.findElement(By.cssSelector("div.row:nth-child(6) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > button:nth-child(1)")).click();
+            // cant interact with the elemnt if use xpath, lets just comment it now and figure it out later, probably we can use for loop elements?
 
+            /*searchField = driver.findElement(By.xpath("//div[contains(@class, 'row m-tb-10 box-shadow ng-star-inserted') and .//p[contains(text(), 'Legal Liability to Passengers')]]//button[contains(@class, 'btn btn-primary w-100 mat-focus-indicator mat-raised-button mat-button-base ng-star-inserted') and span[contains(text(), 'Add to certificate')]]\n"));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", searchField);
+            searchField.click();*/
         });
         Allure.step("Step 2:Update Quotation", () -> {
             // Step 1 logic here
@@ -147,7 +155,11 @@ public class addOnLogic extends baseTest{
     }
     public void addIOSP(){
         Allure.step("Step 1: Add to certificate", () -> {
-            driver.findElement(By.xpath("//div[contains(@class, 'row m-tb-10 box-shadow ng-star-inserted') and (.//p[contains(text(), 'Extreme Weather Coverage')] or .//p[contains(text(), 'Inclusion of Special Perils')] or .//p[contains(text(), 'Flood, Windstorm, Typhoon Coverage')])]//button[contains(@class, 'btn btn-primary w-100 mat-focus-indicator mat-raised-button mat-button-base ng-star-inserted')]")).click();
+            driver.findElement(By.cssSelector("div.row:nth-child(7) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > button:nth-child(1)")).click();
+            // cant interact with the elemnt if use xpath, lets just comment it now and figure it out later, probably we can use for loop elements?
+            /*searchField = driver.findElement(By.xpath("//div[contains(@class, 'row m-tb-10 box-shadow ng-star-inserted') and .//p[contains(text(), 'Extreme Weather Coverage')] or .//p[contains(text(), 'Inclusion of Special Perils')] or .//p[contains(text(), 'Flood, Windstorm, Typhoon Coverage')]]//button[contains(@class, 'btn btn-primary w-100 mat-focus-indicator mat-raised-button mat-button-base ng-star-inserted') and span[contains(text(), 'Add to certificate')]]\n"));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", searchField);
+            searchField.click();*/
         });
         Allure.step("Step 2:Update Quotation", () -> {
             // Step 1 logic here
@@ -169,7 +181,9 @@ public class addOnLogic extends baseTest{
         });
         Allure.step("Step 2: Add to certificate", () -> {
             //driver.findElement(By.xpath("//div[p[@class='text-medium black m-b-0' and text()=' Towing and Cleaning due to Water Damage ']]//button[.//span[text()=' Add to certificate ']]\n")).click();
-            driver.findElement(By.cssSelector("div.row:nth-child(12) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > button:nth-child(1)")).click();
+           driver.findElement(By.cssSelector("div.row:nth-child(12) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > button:nth-child(1)")).click();
+            //((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", searchField);
+            //searchField.click();
         });
         Allure.step("Step 3:Update Quotation", () -> {
             // Step 1 logic here
@@ -190,7 +204,9 @@ public class addOnLogic extends baseTest{
         });
         Allure.step("Step 2: Add to certificate", () -> {
             //driver.findElement(By.xpath("//div[p[@class='text-medium black m-b-0' and text()=' Towing and Cleaning due to Water Damage ']]//button[.//span[text()=' Add to certificate ']]\n")).click();
-            driver.findElement(By.cssSelector("div.row:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > button:nth-child(1)")).click();
+             driver.findElement(By.cssSelector("div.row:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > button:nth-child(1)")).click();
+            //((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", searchField);
+            //searchField.click();
         });
         Allure.step("Step 3:Update Quotation", () -> {
             // Step 1 logic here

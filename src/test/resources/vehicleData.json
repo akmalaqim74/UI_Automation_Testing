@@ -1,91 +1,91 @@
 {
-  "NVIC": "HZG12A",
+  "NVIC": "HRX11A",
   "agentcode": "GCA06084",
   "arrResExtraParam": {
     "item": [
       {
         "indicator": "ismmarketvalue",
         "remark": "",
-        "value": "16300"
+        "value": "9600"
       },
       {
         "indicator": "ismsubrespcode",
         "remark": "",
-        "value": "E002|E003|E009|E011|E013|E016|E017"
+        "value": "E001|E014|E016|E017"
       },
       {
         "indicator": "ismsubrespval",
         "remark": "",
-        "value": "1|1|1|1|1|202102|20212"
+        "value": "4|1|202102|20212"
       },
       {
         "indicator": "insmakecode",
         "remark": "",
-        "value": "SUZUKI"
+        "value": "PROTON"
       },
       {
         "indicator": "insmodelcode",
         "remark": "",
-        "value": "017233"
+        "value": "020095"
       },
       {
         "indicator": "nvicmake",
         "remark": "",
-        "value": "SUZUKI"
+        "value": "PROTON"
       },
       {
         "indicator": "family",
         "remark": "",
-        "value": "SWIFT"
+        "value": "SAGA"
       },
       {
         "indicator": "variant",
         "remark": "",
-        "value": "GLX"
+        "value": "FL"
       },
       {
         "indicator": "series",
         "remark": "",
-        "value": "FACELIFT"
+        "value": "NA"
       },
       {
         "indicator": "style",
         "remark": "",
-        "value": "4D HATCHBACK"
+        "value": "4D SEDAN"
       },
       {
         "indicator": "arrmodelcode",
         "remark": "",
-        "value": "017233,017234,017235,017236,017245,017230,017231,017241,022610"
+        "value": "020095,033035,035878,035879,004469,004608,004609,004652,004601,004602,004603,004604,004605,004606,004654,004655,004656,004657,004659,004660,031608"
       },
       {
         "indicator": "ismmarketvalueem",
         "remark": "",
-        "value": "17200"
+        "value": "10100"
       },
       {
         "indicator": "ismmarketvaluell",
         "remark": "",
-        "value": "14000"
+        "value": "8100"
       }
     ]
   },
-  "chassisno": "PPEZC21S00121600",
+  "chassisno": "PL1BT3SRRBB235933",
   "compcode": "92",
   "covercode": "01",
-  "engineno": "M15A1448474",
-  "expirydate": "25/06/2024",
-  "ismmakecode": "28",
-  "ismmodelcode": "06",
+  "engineno": "S4PERD3898",
+  "expirydate": "15/06/2024",
+  "ismmakecode": "31",
+  "ismmodelcode": "04",
   "ismncdrespcode": "",
-  "makeyear": "2012",
-  "ncdperc": "25.0",
+  "makeyear": "2011",
+  "ncdperc": "55.0",
   "requestId": "D112",
   "respcode": "1",
-  "respdatetime": "2024-06-13 04.20.21.000000",
+  "respdatetime": "2024-06-20 12.00.23.000000",
   "respdesc": "",
-  "vehRegNo": "KDF9868",
-  "vehcapacity": "1490",
+  "vehRegNo": "AHM4678",
+  "vehcapacity": "1332",
   "vehtypecode": "PRCAR",
   "vehusecode": "PC"
 }

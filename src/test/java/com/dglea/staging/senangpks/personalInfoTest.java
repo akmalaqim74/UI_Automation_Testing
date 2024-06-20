@@ -35,44 +35,93 @@ public class personalInfoTest extends personalInfoLogic {
     }
 
     @Test
-    @DisplayName("Verify ID type field un-editable")
+    @DisplayName("FID002 Verify ID type field un-editable")
     @Description("It shouldnt Allow to edit")
     @Order(1)
     public void IdType(){
         IDTypeField();
     }
     @Test
-    @DisplayName("Verify ID field un-editable")
+    @DisplayName("FID001 Verify ID field un-editable")
     @Description("It shouldnt Allow to edit")
     @Order(2)
     public void ID(){
         IDField();
     }
-    @Test
-    @Order(6)
-    void nameFieldTest(){
-        nameField();
-    }
+
 
 
     @Test
     @Order(3)
+    @DisplayName("FID010 Verify Marital Status need to be selected ")
+    @Description("Verify Marital Status need to be selected")
     public void maritalStatusTest(){
         maritalStatusField();
     }
     @Test
     @Order(4)
-    public void addressTest(){
-
-        assertTrue(address());
+    @DisplayName("FID016 Verify It should display a validation message for blank address")
+    @Description("Verify It should display a validation message for blank address")
+    public void addressBlank(){
+        blankAddress();
+    }
+    @Test
+    @Order(4)
+    @DisplayName("FID013 Verify It should display a validation message for blank email")
+    @Description("Verify It should display a validation message for blank email")
+    public void emailBlank(){
+        blankEmail();
     }
     @Test
     @Order(5)
-    public  void postCode(){
+    @DisplayName("FID019 Verify Postcode field un-editable")
+    @Description("Verify Postcode field un-editable")
+    public  void postCodeBlank(){
         //postCode cant be change or edit
         searchField = driver.findElement(By.xpath("//input[@formcontrolname='postcode']\n"));
         assertFalse(searchField.isEnabled());
     }
+    @Test
+    @Order(6)
+    @DisplayName("FID003 Verify full name is displayed")
+    @Description("It should display full name")
+    void nameFieldDisplayTest(){
+        nameFieldDisplayFullName();
+    }
+    @Test
+    @Order(6)
+    @DisplayName("FID020 Verify city field un-editable")
+    @Description("It should display full name")
+    void cityFieldUneditable(){
+        cityField();
+    }
+    @Test
+    @Order(6)
+    @DisplayName("FID021 Verify state field un-editable")
+    @Description("It should display full name")
+    void stateFieldUneditable(){
+        stateField();
+    }
+    @Test
+    @Order(7)
+    @DisplayName("FID023 Verify phone number field blank")
+    @Description("- It should display validation message for blank mobile number")
+    void blankPhoneNumber(){
+        blankPhoneNo();
+    }
+
+
+    @Test
+    @Order(8)
+    @DisplayName("FID004 Verify allow Alphabet with selected special characters such as \"\"@/().-,’\"")
+    @Description("It should  Alphabet with selected special characters such as \"\"@/().-,’\"")
+    void nameFieldTest(){
+        nameField();
+    }
+
+
     @RegisterExtension
     screenShotHelper screenshot = new screenShotHelper();
+    @RegisterExtension
+    googleSheetHelper googleSheet = new googleSheetHelper();
 }

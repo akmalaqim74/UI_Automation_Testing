@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class baseTest {
@@ -28,17 +29,19 @@ public class baseTest {
     public static  ArrayList<String> testDataList = new ArrayList<>();
     static ArrayList<String> supportedAddOnList = new ArrayList<>();
     static ArrayList<String> tabs = new ArrayList<String>();
-    public static String name,email,postcode;
+    public static String name,email,postcode,NRIC,vehRegNo;
     public static String provider;
     static String quotationId;
     static String jsonData;
+    static HashMap<String, String> vehicleData = new HashMap<>();
     @BeforeAll
     public static void setUpClass() {
         driver = webDriverManager.getDriver();
-        ((JavascriptExecutor) driver).executeScript("document.body.style.zoom='70%'");
+        //((JavascriptExecutor) driver).executeScript("document.body.style.zoom='70%'");
         wait = webDriverManager.getWait();
         shortWait = webDriverManager.getShortWait();
         tempWait = webDriverManager.getTempWait();
+
         //Fetch data from testData
         try {
             testDataList = sheetHelper.getDataFromExcel();
@@ -109,7 +112,7 @@ public class baseTest {
             }
         }
         wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".align-center > button:nth-child(1)")));
-        driver.findElement(By.cssSelector(".align-center > button:nth-child(1)")).click();
+        //driver.findElement(By.cssSelector(".align-center > button:nth-child(1)")).click();
 
     }
 
@@ -119,10 +122,10 @@ public class baseTest {
     public static void adminPortalLogin(){
         Allure.step("Step 1: Open Admin Portal", () -> {
             // Step 1 logic here
-            /*wait.until(ExpectedConditions.urlContains("https://vehicle.staging.senangpks.com.my/quotation/"));
+            wait.until(ExpectedConditions.urlContains("https://vehicle.staging.senangpks.com.my/quotation/"));
             quotationId = driver.getCurrentUrl();
             String[] parts  = quotationId.split("/");
-            quotationId = parts[parts.length - 1];*/
+            quotationId = parts[parts.length - 1];
             ((JavascriptExecutor) driver).executeScript("window.open();");
             tabs = new ArrayList<String>(driver.getWindowHandles());
             driver.switchTo().window(tabs.get(1));
@@ -150,8 +153,8 @@ public class baseTest {
                 System.out.println("Initialization logic");
                 wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("splash-screen")));
                 wait.until(ExpectedConditions.urlContains("https://portal.staging.senangpks.com.my/dashboard"));
-                driver.get("https://portal.staging.senangpks.com.my/vehicle-policy/view/22c8f7ea-2b9d-480f-842f-fec9a11af556" );
-                //driver.get("https://portal.staging.senangpks.com.my/vehicle-policy/view/" + quotationId);
+                //driver.get("https://portal.staging.senangpks.com.my/vehicle-policy/view/22c8f7ea-2b9d-480f-842f-fec9a11af556" );
+                driver.get("https://portal.staging.senangpks.com.my/vehicle-policy/view/" + quotationId);
                 wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("splash-screen")));
                 ((JavascriptExecutor) driver).executeScript("document.body.style.zoom='60%'");
                 // Additional operations
@@ -207,10 +210,21 @@ public class baseTest {
 
 
         });
+        Allure.step("Step 1: Initialize JSON", () -> {
+            // Step 1 logic here
+            try {
+                vehicleData = vehicleInfoJsonHelper.vehicleInfoJsonHelper(provider);
+            } catch (IOException e) {
+                e.printStackTrace(); // Or handle the exception in some appropriate way
+            }
+
+            // Additional operations
+        });
 
 
 
-        //driver.switchTo().window(tabs.get(0));
+
+        driver.switchTo().window(tabs.get(0));
     }
     //----------------------------------------------------------------------------
     public static boolean isElementPresent(WebDriverWait wait, By locator) {
@@ -220,6 +234,20 @@ public class baseTest {
         } catch (TimeoutException e) {
             return false;
         }
+    }
+    public static boolean DummyISElementPresent(WebDriverWait wait, By locator) {
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+    public void clearOutField(WebElement tempElement){
+        searchField.click();
+        String selectAll = Keys.chord(Keys.CONTROL, "a");
+        searchField.sendKeys(selectAll);
+        searchField.sendKeys(Keys.DELETE);
     }
     public static boolean isElementClickable(WebDriverWait waitM,By locator){
         try {
@@ -324,7 +352,7 @@ public class baseTest {
             directory.createNewFile();
         }else{
             System.out.println("Delete existing vehicle data");
-            FileUtils.deleteDirectory(directory);
+            FileUtils.delete(directory);
             System.out.println("Creating new Directory for failed testcases");
             directory.createNewFile();
         }

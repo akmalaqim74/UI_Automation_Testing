@@ -21,23 +21,24 @@ public class vehiclePortalTest extends vehiclePortalLogic {
 
         printProvider();
     }
-
     @Test
     @Order(1)
     @DisplayName("Generate Quote")
-    @Description("Generate a quote using data from excel\n  provider will be choose and admin portal will be open.\n" +
-            "If provider selected is not available, we will generate quotation again. " +
-            "If provider basic contribution == 0, we will generate quote again")
+    @Description("""
+            Generate a quote using data from excel
+            Provider will be choose and admin portal will be open.
+            If provider selected is not available, we will generate quotation again. \
+            If provider basic contribution == 0, we will generate quote again""")
     void generateQuotation(){
         generateQuote();
+        adminPortalLogin();
         //adminPortalLogin(); Can ignore for now, im not trying to validate against this
         /*providerList();
         This can be used to find out what available provider this testdata got, the reason I comment because
         this method making the test slow
          */
+        System.out.println("NRIC: " + NRIC + "\nvechicle Register No: " + vehRegNo);
     }
-
-
     @Test
     @Order(2)
     @DisplayName("Verify On vehicle portal")
@@ -51,8 +52,72 @@ public class vehiclePortalTest extends vehiclePortalLogic {
 
     @Test
     @Order(3)
+    @DisplayName("GQ001 verify Vehicle Registration")
+    @Description("Verify value on vehicle portal against admin portal api response")
+    void vehRegTest(){
+        VehDetailsValidateValueAgainstAPI("1");
+    }
+    @Test
+    @Order(3)
+    @DisplayName("GQ002 verify Make and Model")
+    @Description("Verify value on vehicle portal against admin portal api response")
+    void makeAndModelTest(){
+        VehDetailsValidateValueAgainstAPI("2");
+    }
+    @Test
+    @Order(3)
+    @DisplayName("GQ003 verify Chassis Number")
+    @Description("Verify value on vehicle portal against admin portal api response")
+    void chassisNoTest(){
+        validateValueAgainstAPI("Chassis Number");
+    }
+    @Test
+    @Order(3)
+    @DisplayName("GQ004 verify Engine Number")
+    @Description("Verify value on vehicle portal against admin portal api response")
+    void engineNoTest(){
+        validateValueAgainstAPI("Engine Number");
+    }
+    @Test
+    @Order(3)
+    @DisplayName("GQ005 verify Engine CC")
+    @Description("Verify value on vehicle portal against admin portal api response")
+    void engineCCTest(){
+        validateValueAgainstAPI("Engine CC");
+    }
+    @Test
+    @Order(3)
+    @DisplayName("GQ006 verify Manufacturing Year")
+    @Description("Verify value on vehicle portal against admin portal api response")
+    void manufacturingYearTest(){
+        validateValueAgainstAPI("Manufacturing Year");
+
+    }
+    @Test
+    @Order(3)
+    @DisplayName("GQ009 verify Type of Cover")
+    @Description("Verify value on vehicle portal against admin portal api response")
+    @Disabled("Logic cant be applied to this")
+    void typeOfCover(){
+        validateValueAgainstAPI("Type of Cover");
+
+    }
+    @Test
+    @Order(3)
+    @DisplayName("GQ011 verify NCD")
+    @Description("Verify value on vehicle portal against admin portal api response")
+    void ncdTest(){
+        validateValueAgainstAPI("NCD");
+    }
+
+
+
+
+
+    @Test
+    @Order(4)
     @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Verify Comprehensive is supported")
+    @DisplayName("GQ031 Verify Comprehensive is supported")
     @Description("Choose comprehensive then update the quote, validate whether Premium summary will show comprehensive")
     public void isComprehensiveTest() {
         assertTrue(isComprehensive());
@@ -60,8 +125,8 @@ public class vehiclePortalTest extends vehiclePortalLogic {
     }
 
     @Test
-    @Order(4)
-    @DisplayName("Verify TPFT is supported")
+    @Order(5)
+    @DisplayName("GQ032 Verify TPFT is supported")
     @Description("Choose comprehensive then update the quote, validate whether Premium summary will show TPFT")
     @Severity(SeverityLevel.CRITICAL)
     @DisabledIf (value = "conditionVehiclePortal", disabledReason = "Test disabled as provider selected did not support this")
@@ -70,7 +135,7 @@ public class vehiclePortalTest extends vehiclePortalLogic {
         //assertTrue(driver.findElement(By.xpath("//div[@class='p-tb-10 pl-5 pr-5 ng-star-inserted']//p[@class='text f600 black m-b-10' and contains(text(), 'Third Party Fire & Theft')]\n")).isDisplayed());
     }
     @Test
-    @Order(5)
+    @Order(6)
     @DisplayName("Update Quotation")
     void goToaddOn(){
         selectCOMP();
@@ -78,6 +143,8 @@ public class vehiclePortalTest extends vehiclePortalLogic {
 
     @RegisterExtension
     screenShotHelper screenshot = new screenShotHelper();
+    @RegisterExtension
+    googleSheetHelper googleSheet = new googleSheetHelper();
 
 
 }

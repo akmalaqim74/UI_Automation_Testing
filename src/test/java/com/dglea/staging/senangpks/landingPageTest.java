@@ -15,57 +15,57 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("1.Landing Page")
 @Owner("Intern Akmal")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class landingPageTest extends baseTest {
-
-
+public class landingPageTest extends landingPageLogic {
 
     @Test
-    void temp (){
-        adminPortalLogin();
-    }
-    /*@Test
     @Order(1)
+    @DisplayName("Pre Staff Id Insert")
     @Description("Are we on Landing Page (Fill in Form)?")
     public void onForm(){
         Allure.step("Step 1: Insert Staff Id", () -> {
             insertStaffId();
             assertTrue(driver.findElement(By.cssSelector(".align-center > button:nth-child(1)")).isDisplayed());
         });
+        fillInDetails();
         }
     @Test
-    @DisplayName("Verify NRIC field cant be empty")
+    @Order(2)
+    @DisplayName("LP010 Verify NRIC field cant be empty")
     @Description("Validation If NRIC field is empty")
     public void NricRequiredTest(){
-        assertTrue(driver.findElement(By.cssSelector("#mat-error-0 > strong:nth-child(1)")).isDisplayed());
+        blankNRICField();
     }
-
     @Test
-    @DisplayName("Verify vehicle number field cant be empty")
-    @Description("Validation if vehicle Number field is empty")
-
-    public void vehNoRequiredTest(){
-        //assertTrue(driver.findElement(By.cssSelector("#mat-error-1")).isDisplayed());
-        assertTrue(driver.findElement(By.cssSelector("#mat-error-1")).isDisplayed());
-    }*/
-    /*@Test
-    @Disabled
+    @Order(3)
+    @DisplayName("LP005 Verify name field cant be empty")
     @Description("Validation if name field is empty")
     void NameRequiredTest(){
-        assertTrue(driver.findElement(By.cssSelector("#mat-error-1")).isDisplayed());
+        blankNameField();
     }
+
     @Test
-    @Disabled
+    @DisplayName("LP002 Verify vehicle number field cant be empty")
+    @Description("Validation if vehicle Number field is empty")
+    public void vehNoRequiredTest(){
+       blankVehRegField();
+    }
+
+    @Test
+    @DisplayName("LP014 Verify postcode field cant be empty")
     @Description("Validation if postcode empty")
     void postcodeRequiredTest(){
-        assertTrue(driver.findElement(By.cssSelector("#mat-error-3")).isDisplayed());
+        blankPostCodeField();
     }
     @Test
-    @Disabled
+    @DisplayName("LP016 Verify email field cant be empty")
     @Description("Validation if email address is empty")
     void emailRequiredTest(){
-        assertTrue(driver.findElement(By.cssSelector("#mat-error-4")).isDisplayed());
-    }*/
+        blankEmailField();
+    }
 
     @RegisterExtension
     screenShotHelper screenshot = new screenShotHelper();
+
+    @RegisterExtension
+    googleSheetHelper googleSheet = new googleSheetHelper();
 }

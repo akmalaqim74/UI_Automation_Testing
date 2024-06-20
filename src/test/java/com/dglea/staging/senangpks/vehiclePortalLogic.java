@@ -10,14 +10,15 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class vehiclePortalLogic extends baseTest{
     static Boolean presenceC,presenceT,presence;
-    public static String vehNo,NRIC;
     static double tempBasicContribution;
     static int i;
+    static String valueFromAPI;
 
     @Step("Generate Quote Using test data")
     public static void generateQuote(){
@@ -29,7 +30,7 @@ public class vehiclePortalLogic extends baseTest{
                 String[] parts = data.split(",");
                 System.out.println("Count: " + i + " \nData: "+data);
                 NRIC = parts[0];
-                vehNo = parts[1];
+                vehRegNo = parts[1];
                 Allure.step("Step 1: Fill In Field", () -> {
                     //NRIC Field
                     searchField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#mat-input-1")));
@@ -46,7 +47,7 @@ public class vehiclePortalLogic extends baseTest{
                     searchField = driver.findElement(By.cssSelector("#mat-input-3"));
                     searchField.click();
                     searchField.clear();
-                    searchField.sendKeys(vehNo);
+                    searchField.sendKeys(vehRegNo);
                     //postcode field
                     searchField = driver.findElement(By.cssSelector("#mat-input-4"));
                     searchField.click();
@@ -58,10 +59,10 @@ public class vehiclePortalLogic extends baseTest{
                     searchField.click();
                     searchField.sendKeys(email);
                     //once used remove test data from list
-                    testDataList.remove(i);
-                    for(String temp : testDataList){
+                    //testDataList.remove(i);
+                    /*for(String temp : testDataList){
                         System.out.println("Testdata latest: " + temp);
-                    }
+                    }*/
                 });
 
                 Allure.step("2. Generate Quotation", () -> {
@@ -70,18 +71,20 @@ public class vehiclePortalLogic extends baseTest{
                 });
                 Allure.step("Step 3: Verify Quote Generated", () -> {
                     // Step 2 logic here
-                    presence = isElementPresent(tempWait,By.xpath("//mat-dialog-container[.//button[contains(., 'CLOSE')]]\n"));
-
+                    //Shitty solution here, solve it your way as you wish
+                    presence = isElementPresent(wait,By.xpath("//mat-dialog-container//button//span[text()='CLOSE']\n"));
+                    //presence = driver.findElements(By.tagName("mat-dialog-container")).size() > 0;
+                    //System.out.println("Count of tagName: " + driver.findElements(By.tagName("mat-dialog-container")).size());
+                    System.out.println("Presence Value" + presence);
                     if (presence) {
                         Allure.step("Generate Quote Failed", Status.FAILED);
                         System.out.println("Handle if cant generate quote data");
-                        tempWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("cdk-overlay-0")));
+                        //tempWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("cdk-overlay-0")));
                         TakesScreenshot screenshotDriver = (TakesScreenshot) driver;
                         byte[] screenshot = screenshotDriver.getScreenshotAs(OutputType.BYTES);
-                        Allure.addAttachment("Generate quote Failed for NRIC: " + NRIC + "Vehicle No: " + vehNo, new ByteArrayInputStream(screenshot));
-                        driver.findElement(By.cssSelector(".mat-dialog-actions > div:nth-child(1) > button:nth-child(1) > span:nth-child(1)")).click();
+                        Allure.addAttachment("Generate quote Failed for NRIC: " + NRIC + "Vehicle No: " + vehRegNo, new ByteArrayInputStream(screenshot));
+                        driver.findElement(By.xpath("//mat-dialog-container//button//span[text()='CLOSE']\n")).click();
                         //temporary solution
-
 
                     }else {
                         Allure.step("Generate Quote Successful", Status.PASSED);
@@ -134,6 +137,7 @@ public class vehiclePortalLogic extends baseTest{
 
                     }
                 });
+                System.out.println("Count: " + i);
             }
 
         }
@@ -252,6 +256,8 @@ public class vehiclePortalLogic extends baseTest{
     @Step("Choosing Takaful Malaysia as provider")
     public static void choosingProvider(){
         driver.findElement(By.xpath("//img[@src='https://senang1.sgp1.digitaloceanspaces.com/public/assets/insurance_provider/"+ provider+"_logo.svg']\n")).click();
+        //driver.findElement(By.xpath("//img[@src='https://senang1.sgp1.digitaloceanspaces.com/public/assets/insurance_provider/zurich_logo.svg']\n")).click();
+
     }
 
     public  static void providerList(){
@@ -299,5 +305,65 @@ public class vehiclePortalLogic extends baseTest{
         String fileName = parts[parts.length - 1];
         String providerName = fileName.split("_logo")[0];
         return providerName;
+    }
+    public void validateValueAgainstAPI(String valuetoValidate){
+        Allure.step("Step 1: Get Text from Vehicle info section", () -> {
+            // Step 1 logic here
+            searchField = driver.findElement(By.xpath("//p[text()='"+valuetoValidate+"']/following-sibling::p\n"));
+            // Additional operations
+        });
+        Allure.step("Step 2: Get data from admin portal", () -> {
+            valueFromAPI = vehicleData.get(valuetoValidate);
+
+        });Allure.step("Step 3: Verify vehicle portal against admin portal", () -> {
+            // Step 1 logic here
+            if (valuetoValidate == "NCD"){
+                System.out.println("Value from admin portal: " + valueFromAPI + "\nValue from vehicle portal: " + searchField.getText());
+                assertEquals(ncdTopointer(searchField.getText()),valueFromAPI);
+            } else if (valuetoValidate == "Type of Cover") {
+                System.out.println("Value from admin portal: " + valueFromAPI + "\nValue from vehicle portal: " + searchField.getText());
+                String temp = searchField.getText().toLowerCase().trim();
+                assertTrue(temp.contains(valuetoValidate.toLowerCase().trim()));
+            } else{
+                System.out.println("Value from admin portal: " + valueFromAPI + "\nValue from vehicle portal: " + searchField.getText());
+                assertEquals(searchField.getText(),valueFromAPI);
+            }
+
+            // Additional operations
+        });
+    }
+    public void VehDetailsValidateValueAgainstAPI(String index){
+        Allure.step("Step 1: Get Text from Vehicle info section", () -> {
+                // Step 1 logic here
+            searchField = driver.findElement(By.cssSelector("form.w-100 > div:nth-child(1) > div:nth-child(1) > div:nth-child(2)"));
+        });
+        Allure.step("Step 2: Get data from admin portal", () -> {
+            if(index.equals("1")){
+                valueFromAPI = vehicleData.get("Vehicle Registration No.");
+            }else{
+                valueFromAPI = vehicleData.get("Make and Model");
+            }
+
+        });
+        Allure.step("Step 3: Verify vehicle portal against admin portal", () -> {
+            // Step 1 logic herep
+            List<WebElement> pElements = searchField.findElements(By.tagName("p"));
+            if(index.equals("1")){
+                assertEquals(pElements.get(0).getText(),valueFromAPI);
+                System.out.println("Value from admin portal: " + valueFromAPI + "\nValue from vehicle portal: " + pElements.get(0).getText());
+
+            }
+            else{
+                System.out.println("Value from admin portal: " + valueFromAPI + "\nValue from vehicle portal: " + pElements.get(1).getText());
+                String temp = pElements.get(1).getText().toLowerCase().trim();
+                assertTrue(temp.contains(valueFromAPI.toLowerCase().trim()));
+               }
+            // Additional operations
+        });
+    }
+    String ncdTopointer(String tempNCD){
+        tempNCD = tempNCD.replaceAll("[^0-9.]", "");
+        double tempNcd = Double.parseDouble(tempNCD);
+        return String.valueOf(tempNcd);
     }
 }

@@ -1,6 +1,7 @@
 package com.dglea.staging.senangpks;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -25,8 +26,9 @@ public class webDriverManager {
             options.setLogLevel(FirefoxDriverLogLevel.TRACE);
             driver = new FirefoxDriver(options);
             driver.manage().window().maximize();
-            //driver.get("https://dglea.staging.senangpks.com.my/");
-            driver.get("https://www.google.com/");
+            driver.get("https://dglea.staging.senangpks.com.my/");
+            ((JavascriptExecutor) driver).executeScript("document.body.style.zoom='60%'");
+            //driver.get("https://www.google.com/");
             wait = new WebDriverWait(driver, Duration.ofSeconds(50));
 
         }

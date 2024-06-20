@@ -6,6 +6,7 @@ import org.junit.jupiter.api.condition.DisabledIf;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 
 import static junit.framework.Assert.assertTrue;
 
@@ -30,7 +31,7 @@ public class addOnTest extends addOnLogic {
     @Severity(SeverityLevel.BLOCKER)
     void eachTestEnded(){
         try {
-            Thread.sleep(1000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -76,7 +77,7 @@ public class addOnTest extends addOnLogic {
 
     @Test
     @Order(4)
-    @DisplayName("WindShield")
+    @DisplayName("AO001 WindShield")
     @Description("Add Windshield to certificate and verify its diplayed on premium summary")
     @Tag("WS")
     @DisabledIf(value = "disabledWS", disabledReason = "Test disabled as provider selected did not support this")
@@ -87,7 +88,7 @@ public class addOnTest extends addOnLogic {
     }
     @Test
     @Order(5)
-    @DisplayName("Strike, Riot & Civil Commotion")
+    @DisplayName("AO004 Strike, Riot & Civil Commotion")
     @Description("Add SRCP to certificate and verify its diplayed on premium summary")
     @Tag("SRCP")
     @DisabledIf(value = "disabledSRCP", disabledReason = "Test disabled as provider selected did not support this")
@@ -96,7 +97,7 @@ public class addOnTest extends addOnLogic {
     }
     @Test
     @Order(6)
-    @DisplayName("LLOP")
+    @DisplayName("AO005 LLOP")
     @Description("Add LLOP to certificate and verify its diplayed on premium summary")
     @DisabledIf(value = "disabledLLOP", disabledReason = "Test disabled as provider selected did not support this")
     public void LLOP(){
@@ -105,7 +106,7 @@ public class addOnTest extends addOnLogic {
 
     @Test
     @Order(7)
-    @DisplayName("LLTP")
+    @DisplayName("AO006 LLTP")
     @Description("Add LLTP to certificate and verify its diplayed on premium summary")
     @DisabledIf(value = "disabledLLTP", disabledReason = "Test disabled as provider selected did not support this")
     public void LLTP(){
@@ -114,7 +115,7 @@ public class addOnTest extends addOnLogic {
 
     @Test
     @Order(8)
-    @DisplayName("IOSP")
+    @DisplayName("AO002 IOSP")
     @Description("Add IOSP to certificate and verify its diplayed on premium summary")
     @DisabledIf(value = "disabledIOSP", disabledReason = "Test disabled as provider selected did not support this")
     public void IOSP(){
@@ -123,7 +124,7 @@ public class addOnTest extends addOnLogic {
 
     @Test
     @Order(9)
-    @DisplayName("Towing and Cleaning due to Water Damage")
+    @DisplayName("AO008 Towing and Cleaning due to Water Damage")
     @Description("Add Towing to certificate and verify its diplayed on premium summary")
     @DisabledIf(value = "disabledTowing", disabledReason = "Test disabled as provider selected did not support this")
     public void towingPlan1(){
@@ -132,7 +133,7 @@ public class addOnTest extends addOnLogic {
 
     @Test
     @Order(10)
-    @DisplayName("Pa Plus Add On")
+    @DisplayName("AO009 Pa Plus Add On")
     @Description("Add Pa Plus to certificate and verify its diplayed on premium summary")
     @DisabledIf(value = "disabledPAPLUS", disabledReason = "Test disabled as provider selected did not support this")
     void PaPlus(){
@@ -151,7 +152,8 @@ public class addOnTest extends addOnLogic {
 
     @RegisterExtension
     screenShotHelper screenshot = new screenShotHelper();
-
+    @RegisterExtension
+    googleSheetHelper googleSheet = new googleSheetHelper();
 
 }
 

@@ -6,7 +6,11 @@ import org.junit.platform.suite.api.Suite;
 @Suite
 @Owner("Intern Akmal")
 @SelectClasses({
-        landingPageTest.class
+        landingPageTest.class,
+        vehiclePortalTest.class,
+        addOnTest.class,
+        personalInfoTest.class,
+        confirmNpayTest.class
 })
 public class testSuite {
 
