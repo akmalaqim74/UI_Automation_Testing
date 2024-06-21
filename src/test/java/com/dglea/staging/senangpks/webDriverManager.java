@@ -15,13 +15,19 @@ public class webDriverManager {
     private static WebDriver driver;
     private static WebDriverWait wait,shortWait,tempWait;
 
+
     private webDriverManager() {
         // private constructor to prevent instantiation
     }
 
     public static WebDriver getDriver() {
+        String fileSeparator = System.getProperty("file.separator");
+        String currentDir = System.getProperty("user.dir");
         if (driver == null) {
-            WebDriverManager.firefoxdriver().setup();
+            System.setProperty("webdriver.gecko.driver", currentDir + fileSeparator + "geckodriver"+ fileSeparator + "win64" + fileSeparator + "0.34.0" + fileSeparator + "geckodriver.exe");
+
+            //this one automatic download version, idont know why but cause some issues
+            //WebDriverManager.firefoxdriver().setup();
             FirefoxOptions options = new FirefoxOptions();
             options.setLogLevel(FirefoxDriverLogLevel.TRACE);
             driver = new FirefoxDriver(options);
@@ -30,7 +36,6 @@ public class webDriverManager {
             ((JavascriptExecutor) driver).executeScript("document.body.style.zoom='60%'");
             //driver.get("https://www.google.com/");
             wait = new WebDriverWait(driver, Duration.ofSeconds(50));
-
         }
         return driver;
     }

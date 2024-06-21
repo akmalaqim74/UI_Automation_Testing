@@ -28,6 +28,11 @@ jobs:
         run: allure --version
       - name: Install Firefox
         run: sudo apt-get install -y firefox
+      - name: Check Firefox Version
+        run: firefox --version
+      - name: Check Geckodriver Version
+        run: geckodriver --version
+
 
       - name: Build and Test with Maven
         run: mvn compile exec:java
