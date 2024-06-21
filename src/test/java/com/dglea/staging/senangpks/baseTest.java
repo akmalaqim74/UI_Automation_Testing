@@ -33,6 +33,7 @@ public class baseTest {
     public static String provider;
     static String quotationId;
     static String jsonData;
+    static String fileSeparator = System.getProperty("file.separator");
     static HashMap<String, String> vehicleData = new HashMap<>();
     @BeforeAll
     public static void setUpClass() {
@@ -345,7 +346,7 @@ public class baseTest {
                 //return " ";
         }
         String currentDir = System.getProperty("user.dir");
-        String filePath = currentDir + "\\src\\test\\resources\\vehicleData.json";
+        String filePath = currentDir + fileSeparator +"src"+ fileSeparator + "test"+ fileSeparator+"resources" + fileSeparator+ "vehicleData.json";
         File directory = new File(filePath);
         if (!directory.exists()) {
             System.out.println("Creating new json data");

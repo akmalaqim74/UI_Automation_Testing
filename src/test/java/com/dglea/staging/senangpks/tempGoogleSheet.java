@@ -29,9 +29,11 @@ public class tempGoogleSheet {
     private static final String APPLICATION_NAME = "Automated Test Runner";
     static String spreadsheetId = "1kFWxC3cuhrUihSdf4xbRM3nOgBFAWhqMltcEKwwHEGY";
     //private static final String CREDENTIALS_FILE_PATH = currentDir + "\\src\\test\\resources\\credentials.json";
+    static String fileSeparator = System.getProperty("file.separator");
+
 
     private static Credential authorize() throws IOException, GeneralSecurityException{
-        InputStream in = tempGoogleSheet.class.getResourceAsStream("/credentials.json");
+        InputStream in = tempGoogleSheet.class.getResourceAsStream(fileSeparator + "credentials.json");
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(
                 GsonFactory.getDefaultInstance(),new InputStreamReader(in)
         );

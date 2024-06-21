@@ -14,7 +14,8 @@ public class vehicleInfoJsonHelper {
     static HashMap<String, String> vehicleInfoMap = new HashMap<>();
     static ObjectMapper objectMapper = new ObjectMapper();
     static String currentDir = System.getProperty("user.dir");
-    static String filePath = currentDir + "\\src\\test\\resources\\vehicleData.json";
+    static String fileSeparator = System.getProperty("file.separator");
+    static String filePath = currentDir + fileSeparator +"src"+ fileSeparator + "test"+ fileSeparator +"resources" + fileSeparator + "vehicleData.json";
 
     public static void main(String[] args) throws IOException {
 

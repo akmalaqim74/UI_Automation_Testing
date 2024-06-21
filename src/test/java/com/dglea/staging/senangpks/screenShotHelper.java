@@ -24,7 +24,7 @@ public class screenShotHelper extends baseTest implements TestWatcher {
                 // Get the test display name
                 String projectRoot = System.getProperty("user.dir");
                 String testName = context.getDisplayName();
-                saveScreenshotToFile(screenshot,projectRoot + "\\failed-testcases\\"+testName + ".png");
+                saveScreenshotToFile(screenshot,projectRoot + fileSeparator + "failed-testcases"+fileSeparator+testName + ".png");
                 Allure.addAttachment(testName, new ByteArrayInputStream(screenshot));
                 ((JavascriptExecutor) driver).executeScript("document.body.style.zoom='80%'");
             } catch (InterruptedException e) {

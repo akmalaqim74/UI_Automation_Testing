@@ -32,7 +32,7 @@ public class main {
     static String errorMessage = "The test suite has finished executing with ERRORS. Please find the Allure report attached." ;
     static String defaultReceiver = "akmalmustaqimsenang@gmail.com";
     static String defaultMsg = "The test suite has finished executing with BROKEN || skipped || no issues test. Please find the Allure report attached.";
-
+    static String fileSeparator = System.getProperty("file.separator");
     public static void main(String[] args) throws IOException{
         runAll();
 
@@ -57,7 +57,7 @@ public class main {
     public static void failedTestCases() throws IOException {
         //FYI inside allure-reports\\data\\attachments we also have the list of error screenshot, so if you want to use that, up to u
         String currentDir = System.getProperty("user.dir");
-        String filePath = currentDir + "\\failed-testcases";
+        String filePath = currentDir + fileSeparator + "failed-testcases";
         File directory = new File(filePath);
         if (!directory.exists()) {
             System.out.println("Creating new Directory for failed testcases");
@@ -74,7 +74,7 @@ public class main {
         try {
             // Get the current working directory
             String currentDir = System.getProperty("user.dir");
-            String filePath = currentDir + "\\allure-reports\\history\\history-trend.json";
+            String filePath = currentDir + fileSeparator+ "allure-reports"+ fileSeparator + "history" + fileSeparator + "history-trend.json";
 
             // Read the JSON file
             JsonElement jsonElement = JsonParser.parseReader(new FileReader(filePath));
@@ -109,7 +109,7 @@ public class main {
     public static void allureHandler() throws IOException{
 
         String projectRoot = System.getProperty("user.dir");
-        String allureResultsPath = projectRoot + "\\allure-results";
+        String allureResultsPath = projectRoot + fileSeparator + "allure-results";
         System.out.println("Allure Results Path: " + allureResultsPath);
         File dirFile = new File(allureResultsPath);
         if(dirFile.exists()){
@@ -117,7 +117,7 @@ public class main {
         }else{
             System.out.println("allure-result not exist");
         }
-        allureReportPath = projectRoot + "\\allure-report";
+        allureReportPath = projectRoot + fileSeparator + "allure-report";
         System.out.println("Allure Report Path: " + allureReportPath);
         File reportDir = new File(allureReportPath);
         if(reportDir.exists()){
@@ -126,7 +126,7 @@ public class main {
             System.out.println("allure report not exist");
         }
 
-        String allureReportsPath = projectRoot + "\\allure-reports";
+        String allureReportsPath = projectRoot + fileSeparator + "allure-reports";
         System.out.println("Allure Results Path: " + allureResultsPath);
         File reportsDir = new File(allureReportsPath);
         if(reportsDir.exists()){
@@ -182,8 +182,8 @@ public class main {
     public static void renameAllureReport() throws IOException {
 
         String projectRoot = System.getProperty("user.dir");
-        File indexFile = new File(projectRoot + "\\allure-report\\index.html");
-        File renamedFile = new File(projectRoot + "\\allure-report\\allure_report.html");
+        File indexFile = new File(projectRoot + fileSeparator +"allure-report" + fileSeparator + "index.html");
+        File renamedFile = new File(projectRoot + fileSeparator + "allure-report"+fileSeparator + "allure_report.html");
         if (indexFile.exists()) {
             if (indexFile.renameTo(renamedFile)) {
                 System.out.println("Renamed index.html to allureReport.html");
@@ -238,7 +238,7 @@ public class main {
             // Part two is attachment
             messageBodyPart1 = new MimeBodyPart();
             String projectRoot = System.getProperty("user.dir");
-            String failedTestPath = projectRoot + "\\failed-testcases";
+            String failedTestPath = projectRoot + fileSeparator + "failed-testcases";
             File directory = new File(failedTestPath);
             if (directory.exists() && directory.isDirectory()) {
                 File[] files = directory.listFiles();
@@ -274,8 +274,8 @@ public class main {
             // Add another body part for text content
             MimeBodyPart messageBodyPart2 = new MimeBodyPart();
             messageBodyPart2.setText(msg);
-            allureReportPath = projectRoot + "\\allure-report";
-            DataSource source2 = new FileDataSource(allureReportPath + "\\allure_report.html");
+            allureReportPath = projectRoot + fileSeparator + "allure-report";
+            DataSource source2 = new FileDataSource(allureReportPath + fileSeparator + "allure_report.html");
             messageBodyPart2.setDataHandler(new DataHandler(source2));
             messageBodyPart2.setFileName("allure_report.html");
             multipart.addBodyPart(messageBodyPart2);
