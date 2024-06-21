@@ -1,19 +1,33 @@
-name: Java Main Class Execution
+name: Build and Test
 
 on: [push]
 
 jobs:
   build-and-run:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v2
-      
-    - name: Set up JDK 20
-      uses: actions/setup-java@v2
-      with:
-        java-version: 20
-        distribution: adopt
-        
-    - name: Compile and Execute Java Main Class
-      run: mvn compile exec:java
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 20
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '20'
+
+      - name: Install Maven
+        run: sudo apt-get install -y maven
+
+      - name: Install Allure
+        run: |
+          ALLURE_VERSION=2.29.0
+          wget -qO- https://github.com/allure-framework/allure2/releases/download/${ALLURE_VERSION}/allure-${ALLURE_VERSION}.tgz | sudo tar -zx -C /opt/
+          sudo ln -s /opt/allure-${ALLURE_VERSION}/bin/allure /usr/bin/allure
+
+      - name: Verify Allure Installation
+        run: allure --version
+      - name: Install Firefox
+        run: sudo apt-get install -y firefox
+
+      - name: Build and Test with Maven
+        run: mvn compile exec:java
