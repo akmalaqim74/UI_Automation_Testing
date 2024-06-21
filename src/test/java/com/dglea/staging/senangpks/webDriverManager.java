@@ -29,6 +29,7 @@ public class webDriverManager {
             //this one automatic download version, idont know why but cause some issues
             WebDriverManager.firefoxdriver().setup();
             FirefoxOptions options = new FirefoxOptions();
+            options.addArguments("--headless");
             options.setLogLevel(FirefoxDriverLogLevel.TRACE);
             driver = new FirefoxDriver(options);
             driver.manage().window().maximize();
