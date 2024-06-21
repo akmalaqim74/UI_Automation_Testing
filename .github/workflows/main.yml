@@ -13,6 +13,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: 20
+        distribution: adopt
         
     - name: Compile and Execute Java Main Class
       run: mvn compile exec:java
