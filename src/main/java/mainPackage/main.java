@@ -16,14 +16,18 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+
+import static org.bouncycastle.util.Arrays.concatenate;
 
 public class main {
     static int skipped,broken,failures,testsRun;
     static String allureReportPath;
-    static String[] mavenCommand = {"cmd.exe", "/c", "mvn", "clean", "test" ,"-Dtest=testSuite"};
-    static String[] allureCommand = { "cmd.exe", "/c", "allure", "generate", "allure-results", "-o","allure-reports"};
-    static String[] allureCommandSingleReport = { "cmd.exe", "/c", "allure", "generate", "--single-file", "allure-results"};
+    static String[] mavenCommand = {"mvn", "clean", "test", "-Dtest=testSuite"};
+    static String[] allureCommand = {"allure", "generate", "allure-results", "-o", "allure-reports"};
+    static String[] allureCommandSingleReport = {"allure", "generate", "--single-file", "allure-results"};
     static String errorReceiver = "akmalaqim74@gmail.com";
     static String errorMessage = "The test suite has finished executing with ERRORS. Please find the Allure report attached." ;
     static String defaultReceiver = "akmalmustaqimsenang@gmail.com";
@@ -132,8 +136,24 @@ public class main {
         }
     }
     private static void executeCommands(String[] commands) {
+        // Determine the command interpreter based on OS
+        String osName = System.getProperty("os.name").toLowerCase();
+        boolean isWindows = osName.contains("win");
+
+        // Adjust commands for Windows or Linux
+        List<String> commandList = new ArrayList<>();
+        // Add interpreter commands for Windows
+        if (isWindows) {
+            commandList.add("cmd.exe");
+            commandList.add("/c");
+        }
+
+        // Add all commands
+        for (String command : commands) {
+            commandList.add(command);
+        }
+        ProcessBuilder processBuilder = new ProcessBuilder(commandList);
         // Initialize ProcessBuilder
-        ProcessBuilder processBuilder = new ProcessBuilder(commands);
         processBuilder.redirectErrorStream(true);
         try {
             // Start the process
