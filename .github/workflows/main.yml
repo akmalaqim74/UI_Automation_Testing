@@ -5,6 +5,9 @@ on: [push]
 jobs:
   build-and-run:
     runs-on: ubuntu-latest
+    env:
+      GECKODRIVER_VERSION: "0.34.0"
+      FIREFOX_VERSION: "127"
 
     steps:
       - uses: actions/checkout@v2
