@@ -27,7 +27,7 @@ public class webDriverManager {
             System.setProperty("webdriver.gecko.driver", currentDir + fileSeparator + "geckodriver"+ fileSeparator + "win64" + fileSeparator + "0.34.0" + fileSeparator + "geckodriver.exe");
 
             //this one automatic download version, idont know why but cause some issues
-            //WebDriverManager.firefoxdriver().setup();
+            WebDriverManager.firefoxdriver().setup();
             FirefoxOptions options = new FirefoxOptions();
             options.setLogLevel(FirefoxDriverLogLevel.TRACE);
             driver = new FirefoxDriver(options);
