@@ -58,15 +58,30 @@ public class personalInfoTest extends personalInfoLogic {
     public void maritalStatusTest(){
         maritalStatusField();
     }
+
     @Test
     @Order(4)
+    @DisplayName("FID004 Verify allow Alphabet with selected special characters such as \"\"@/().-,’\"")
+    @Description("It should  Alphabet with selected special characters such as \"\"@/().-,’\"")
+    void nameFieldTest(){
+        nameField();
+    }
+    @Test
+    @Order(4)
+    @DisplayName("FID003 Verify full name is displayed")
+    @Description("It should display full name")
+    void nameFieldDisplayTest(){
+        nameFieldDisplayFullName();
+    }
+    @Test
+    @Order(5)
     @DisplayName("FID016 Verify It should display a validation message for blank address")
     @Description("Verify It should display a validation message for blank address")
     public void addressBlank(){
         blankAddress();
     }
     @Test
-    @Order(4)
+    @Order(5)
     @DisplayName("FID013 Verify It should display a validation message for blank email")
     @Description("Verify It should display a validation message for blank email")
     public void emailBlank(){
@@ -81,22 +96,16 @@ public class personalInfoTest extends personalInfoLogic {
         searchField = driver.findElement(By.xpath("//input[@formcontrolname='postcode']\n"));
         assertFalse(searchField.isEnabled());
     }
+
     @Test
-    @Order(6)
-    @DisplayName("FID003 Verify full name is displayed")
-    @Description("It should display full name")
-    void nameFieldDisplayTest(){
-        nameFieldDisplayFullName();
-    }
-    @Test
-    @Order(6)
+    @Order(7)
     @DisplayName("FID020 Verify city field un-editable")
     @Description("It should display full name")
     void cityFieldUneditable(){
         cityField();
     }
     @Test
-    @Order(6)
+    @Order(7)
     @DisplayName("FID021 Verify state field un-editable")
     @Description("It should display full name")
     void stateFieldUneditable(){
@@ -110,14 +119,6 @@ public class personalInfoTest extends personalInfoLogic {
         blankPhoneNo();
     }
 
-
-    @Test
-    @Order(8)
-    @DisplayName("FID004 Verify allow Alphabet with selected special characters such as \"\"@/().-,’\"")
-    @Description("It should  Alphabet with selected special characters such as \"\"@/().-,’\"")
-    void nameFieldTest(){
-        nameField();
-    }
 
 
     @RegisterExtension

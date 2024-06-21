@@ -1,47 +1,47 @@
 {
-  "NVIC": "HRX11A",
+  "NVIC": "HX414A",
   "agentcode": "GCA06084",
   "arrResExtraParam": {
     "item": [
       {
         "indicator": "ismmarketvalue",
         "remark": "",
-        "value": "9600"
+        "value": "17900"
       },
       {
         "indicator": "ismsubrespcode",
         "remark": "",
-        "value": "E001|E014|E016|E017"
+        "value": "E006|E013|E016|E017"
       },
       {
         "indicator": "ismsubrespval",
         "remark": "",
-        "value": "4|1|202102|20212"
+        "value": "07072024|1|202102|20212"
       },
       {
         "indicator": "insmakecode",
         "remark": "",
-        "value": "PROTON"
+        "value": "PERODUA"
       },
       {
         "indicator": "insmodelcode",
         "remark": "",
-        "value": "020095"
+        "value": "003726"
       },
       {
         "indicator": "nvicmake",
         "remark": "",
-        "value": "PROTON"
+        "value": "PERODUA"
       },
       {
         "indicator": "family",
         "remark": "",
-        "value": "SAGA"
+        "value": "MYVI"
       },
       {
         "indicator": "variant",
         "remark": "",
-        "value": "FL"
+        "value": "EZ STANDARD"
       },
       {
         "indicator": "series",
@@ -51,41 +51,41 @@
       {
         "indicator": "style",
         "remark": "",
-        "value": "4D SEDAN"
+        "value": "4D HATCHBACK"
       },
       {
         "indicator": "arrmodelcode",
         "remark": "",
-        "value": "020095,033035,035878,035879,004469,004608,004609,004652,004601,004602,004603,004604,004605,004606,004654,004655,004656,004657,004659,004660,031608"
+        "value": "022488,022611,022670,022760,003726,003727,003728,003731,003732,003733,003734,003845,003846,003847,003848,003849,003850,003851,003852,003853,003854,003855,003856,003843,003844,003857,003858,003859,003860,003861,003862,003863,003875,003877,003878,003879,022775,030744,031207"
       },
       {
         "indicator": "ismmarketvalueem",
         "remark": "",
-        "value": "10100"
+        "value": "18900"
       },
       {
         "indicator": "ismmarketvaluell",
         "remark": "",
-        "value": "8100"
+        "value": "14400"
       }
     ]
   },
-  "chassisno": "PL1BT3SRRBB235933",
+  "chassisno": "PM2M602S002188011",
   "compcode": "92",
   "covercode": "01",
-  "engineno": "S4PERD3898",
-  "expirydate": "15/06/2024",
-  "ismmakecode": "31",
-  "ismmodelcode": "04",
+  "engineno": "T64B34A",
+  "expirydate": "07/07/2024",
+  "ismmakecode": "33",
+  "ismmodelcode": "06",
   "ismncdrespcode": "",
-  "makeyear": "2011",
+  "makeyear": "2014",
   "ncdperc": "55.0",
   "requestId": "D112",
   "respcode": "1",
-  "respdatetime": "2024-06-20 12.00.23.000000",
+  "respdatetime": "2024-06-20 11.56.25.000000",
   "respdesc": "",
-  "vehRegNo": "AHM4678",
-  "vehcapacity": "1332",
+  "vehRegNo": "WA3882D",
+  "vehcapacity": "1298",
   "vehtypecode": "PRCAR",
   "vehusecode": "PC"
 }

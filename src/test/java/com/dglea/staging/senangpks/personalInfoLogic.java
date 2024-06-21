@@ -45,6 +45,7 @@ public class personalInfoLogic extends baseTest{
     }
     void nameFieldDisplayFullName(){
         Allure.step("Test 1: It should display full name", () -> {
+            searchField = driver.findElement(By.xpath("//input[@formcontrolname='fullName']\n"));
             if (name.equalsIgnoreCase(searchField.getText())) {
                 Allure.step("Verify full name is displayed", Status.PASSED);
             }else {
@@ -57,9 +58,9 @@ public class personalInfoLogic extends baseTest{
             "\nThe length cannot be less than 5 and must be within 255 character")
     void nameField(){
         Allure.step("Step 1: Find Full Name Field", () -> {
-            searchField.findElement(By.cssSelector("#mat-input-1"));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", searchField);
-            //searchField = driver.findElement(By.xpath("//input[@formcontrolname='fullName']\n"));
+            //searchField = driver.findElement(By.cssSelector("#mat-input-1"));
+            //((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", searchField);
+            searchField = driver.findElement(By.xpath("//input[@formcontrolname='fullName']\n"));
         });
 
         Allure.step("Step: Alphabet with selected special characters such as \"\"@/().-,’\"", () -> {
