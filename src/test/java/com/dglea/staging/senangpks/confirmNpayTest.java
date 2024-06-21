@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class confirmNpayTest extends baseTest {
     static boolean presence;
@@ -55,7 +55,7 @@ public class confirmNpayTest extends baseTest {
 
     public static double addOnCalculation(){
         double addOnPrice = 0;
-        for(String addOnName : addOn){
+        for(String addOnName : supportedAddOnList){
             presence = isElementPresent(shortWait,By.xpath("//div[@class='d-flex' and .//p[@class='text w-100 m-b-0 grey' and contains(text(), '" + addOnName+ "')]]/p[@class='text fvalue m-b-0 grey' and contains(text(), 'RM')]\n"));
             if (presence){
                 searchField = driver.findElement(By.xpath("//div[@class='d-flex' and .//p[@class='text w-100 m-b-0 grey' and contains(text(), '" + addOnName+ "')]]/p[@class='text fvalue m-b-0 grey' and contains(text(), 'RM')]\n"));

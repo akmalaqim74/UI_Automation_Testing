@@ -1,0 +1,91 @@
+{
+  "NVIC": "HX414A",
+  "agentcode": "GCA06084",
+  "arrResExtraParam": {
+    "item": [
+      {
+        "indicator": "ismmarketvalue",
+        "remark": "",
+        "value": "17900"
+      },
+      {
+        "indicator": "ismsubrespcode",
+        "remark": "",
+        "value": "E006|E013|E016|E017"
+      },
+      {
+        "indicator": "ismsubrespval",
+        "remark": "",
+        "value": "07072024|1|202102|20212"
+      },
+      {
+        "indicator": "insmakecode",
+        "remark": "",
+        "value": "PERODUA"
+      },
+      {
+        "indicator": "insmodelcode",
+        "remark": "",
+        "value": "003726"
+      },
+      {
+        "indicator": "nvicmake",
+        "remark": "",
+        "value": "PERODUA"
+      },
+      {
+        "indicator": "family",
+        "remark": "",
+        "value": "MYVI"
+      },
+      {
+        "indicator": "variant",
+        "remark": "",
+        "value": "EZ STANDARD"
+      },
+      {
+        "indicator": "series",
+        "remark": "",
+        "value": "NA"
+      },
+      {
+        "indicator": "style",
+        "remark": "",
+        "value": "4D HATCHBACK"
+      },
+      {
+        "indicator": "arrmodelcode",
+        "remark": "",
+        "value": "022488,022611,022670,022760,003726,003727,003728,003731,003732,003733,003734,003845,003846,003847,003848,003849,003850,003851,003852,003853,003854,003855,003856,003843,003844,003857,003858,003859,003860,003861,003862,003863,003875,003877,003878,003879,022775,030744,031207"
+      },
+      {
+        "indicator": "ismmarketvalueem",
+        "remark": "",
+        "value": "18900"
+      },
+      {
+        "indicator": "ismmarketvaluell",
+        "remark": "",
+        "value": "14400"
+      }
+    ]
+  },
+  "chassisno": "PM2M602S002188011",
+  "compcode": "92",
+  "covercode": "01",
+  "engineno": "T64B34A",
+  "expirydate": "07/07/2024",
+  "ismmakecode": "33",
+  "ismmodelcode": "06",
+  "ismncdrespcode": "",
+  "makeyear": "2014",
+  "ncdperc": "55.0",
+  "requestId": "D112",
+  "respcode": "1",
+  "respdatetime": "2024-06-20 11.56.25.000000",
+  "respdesc": "",
+  "vehRegNo": "WA3882D",
+  "vehcapacity": "1298",
+  "vehtypecode": "PRCAR",
+  "vehusecode": "PC"
+}
