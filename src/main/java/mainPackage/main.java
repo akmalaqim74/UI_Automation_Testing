@@ -209,7 +209,6 @@ public class main {
                 return new PasswordAuthentication("akmalmustaqimsenang@gmail.com", "pnihiuoaiwfoecne");
             }
         });
-
         try {
             // Create a default MimeMessage object
             Message message = new MimeMessage(session);

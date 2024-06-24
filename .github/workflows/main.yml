@@ -1,47 +1,51 @@
-name: Build and Test
+name: Selenium Tests on Staging Branch
 
-on: [push]
+on:
+  push:
+    branches:
+      - staging
 
 jobs:
-  build-and-run:
+  test:
     runs-on: ubuntu-latest
-    env:
-      GECKODRIVER_VERSION: "0.34.0"
-      FIREFOX_VERSION: "127"
+
+    services:
+      firefox:
+        image: selenium/standalone-firefox:latest
+        options: --shm-size=2g  # Adjust shared memory size as needed
 
     steps:
-      - uses: actions/checkout@v2
+      # Checkout the code from the staging branch
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: staging
 
-      - name: Set up JDK 20
+      # Set up Java JDK 17
+      - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: '20'
+          distribution: 'temurin'
+          java-version: '17'
 
-      - uses: browser-actions/setup-geckodriver@latest
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - run: geckodriver --version
+      # Set up Maven
+      - name: Set up Maven
+        uses: s4u/maven-settings-action@v2
 
-      - name: Install Maven
-        run: sudo apt-get install -y maven
-
+      # Install Allure
       - name: Install Allure
         run: |
           ALLURE_VERSION=2.29.0
-          wget -qO- https://github.com/allure-framework/allure2/releases/download/${ALLURE_VERSION}/allure-${ALLURE_VERSION}.tgz | sudo tar -zx -C /opt/
+          wget -qO- https://github.com/allure-framework/allure2/releases/download/${ALLURE_VERSION}/allure-${ALLURE_VERSION}.tgz | tar -zx -C /opt/
           sudo ln -s /opt/allure-${ALLURE_VERSION}/bin/allure /usr/bin/allure
-      
 
-      - name: Verify Allure Installation
-        run: allure --version
-      - name: Install Firefox
-        run: sudo apt-get install -y firefox
-      - name: Check Firefox Version
-        run: firefox --version
-      - name: Check Geckodriver Version
-        run: geckodriver --version
+      # Verify Java, Maven, and Allure installation
+      - name: Verify installations
+        run: |
+          java -version
+          mvn -version
+          allure --version
 
-
-      - name: Build and Test with Maven
+      # Run tests
+      - name: Run tests
         run: mvn compile exec:java

@@ -7,8 +7,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.time.Duration;
 
 public class webDriverManager {
@@ -31,7 +36,13 @@ public class webDriverManager {
             FirefoxOptions options = new FirefoxOptions();
             options.addArguments("--headless");
             options.setLogLevel(FirefoxDriverLogLevel.TRACE);
-            driver = new FirefoxDriver(options);
+            /*try {
+                driver = new RemoteWebDriver(new URL("http://" + System.getenv("HOST_NAME") + ":4444/"), options);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Failed to connect to Selenium Grid hub", e);
+            }*/
+           driver = new FirefoxDriver(options);
             driver.manage().window().maximize();
             driver.get("https://dglea.staging.senangpks.com.my/");
             ((JavascriptExecutor) driver).executeScript("document.body.style.zoom='60%'");
