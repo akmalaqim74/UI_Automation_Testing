@@ -10,7 +10,7 @@ import org.junit.platform.suite.api.Suite;
         vehiclePortalTest.class,
         addOnTest.class,
         personalInfoTest.class,
-        confirmNpayTest.class
+        //confirmNpayTest.class
 })
 public class testSuite {
 

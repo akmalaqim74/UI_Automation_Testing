@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 public class addOnLogic extends baseTest{
     public static double recommendedValueWS;
     public static boolean presence;
@@ -241,9 +240,7 @@ public class addOnLogic extends baseTest{
                 TakesScreenshot screenshotDriver = (TakesScreenshot) driver;
                 byte[] screenshot = screenshotDriver.getScreenshotAs(OutputType.BYTES);
                 Allure.addAttachment("Cover Type change from " + coverType + " to " +
-                                driver.findElement
-                                                (By.xpath
-                                                        ("//div[@class='p-tb-10 pl-5 pr-5 ng-star-inserted']/p[@class='text f600 black m-b-10' and contains(text(), 'Comprehensive')]\n"))
+                                driver.findElement(By.xpath("//div[@class='p-tb-10 pl-5 pr-5 ng-star-inserted']/p[@class='text f600 black m-b-10' and contains(text(), 'Comprehensive')]\n"))
                                         .getText(),
                         new ByteArrayInputStream(screenshot));
             }else {

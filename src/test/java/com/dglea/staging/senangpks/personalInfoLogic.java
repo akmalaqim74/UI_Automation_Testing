@@ -8,6 +8,8 @@ import org.openqa.selenium.*;
 
 import java.io.ByteArrayInputStream;
 
+import static junit.framework.Assert.*;
+
 
 public class personalInfoLogic extends baseTest{
     public static boolean presence;
@@ -18,12 +20,16 @@ public class personalInfoLogic extends baseTest{
         });
         Allure.step("Verify Id Type Field un-editable", () -> {
             // Step 2 logic here
-            boolean tempClickable = searchField.isEnabled();
-            if (tempClickable) {
+            //boolean tempClickable = searchField.isEnabled();
+            //assertFalse(tempClickable);
+            String ariaDisabled = searchField.getAttribute("aria-disabled");
+            assertEquals("true", ariaDisabled);
+
+            /*if (tempClickable) {
                 Allure.step("Bug on field ID Type, Field can be edit: ", Status.FAILED);
             }else {
                 Allure.step("Verify ID type cant be edit", Status.PASSED);
-            }
+            }*/
         });
 
     }
@@ -35,11 +41,12 @@ public class personalInfoLogic extends baseTest{
         Allure.step("Verify Id Field un-editable", () -> {
             // Step 2 logic here
             boolean tempClickable = searchField.isEnabled();
-            if (tempClickable) {
+            assertFalse(tempClickable);
+            /*if (tempClickable) {
                 Allure.step("Bug on  ID Type, Field can be edit: ",Status.FAILED);
             }else {
                 Allure.step("Verify ID cant be edit", Status.PASSED);
-            }
+            }*/
         });
 
     }
@@ -67,18 +74,20 @@ public class personalInfoLogic extends baseTest{
             Allure.step("1. Fill in field name with special Character +^?&%$#=",()->{
                 clearOutField(searchField);
                 searchField.sendKeys("+^?&%$#=");
-                 });
+            });
             //need to fill in all form first in order to validate this, fill in marital status field
             Allure.step("3. Click Next Button",()->{
                 nextButton();
             });
             presence = isElementPresent(tempWait,By.xpath("//mat-dialog-container[contains(., \"Full Name must be alphabet with selected special character such as '/@(),.-.\")]\n"));
+            assertTrue(presence);
+
             if (presence) {
                 //close the dialog message
                 //logic for that--
                 driver.findElement(By.cssSelector(".btn-dark > span:nth-child(1)")).click();
 
-                Allure.step("Verify full name field only allow \n Alphabet with selected special characters such as \"\"@/().-,’\"", Status.PASSED);
+                //Allure.step("Verify full name field only allow \n Alphabet with selected special characters such as \"\"@/().-,’\"", Status.PASSED);
             }else {
                 //still need to validate element that only present on confirm and pay
                 presence = isElementPresent(wait,By.xpath("//button[@class='btn btn-primary w-100 m-t-10 m-b-10 mat-focus-indicator mat-raised-button mat-button-base' and .//span[text()=' Proceed for Payment ']]\n"));
@@ -86,12 +95,12 @@ public class personalInfoLogic extends baseTest{
                 if(presence){
                     driver.findElement(By.xpath("//div[@class='d-lg-flex d-md-line-flex justify-content-between align-items-center']/p[contains(text(), 'Fill in Your Details')]\n")).click();
                 }
-                Allure.step("Verification for special character  \"\"@/().-,’\" failed", Status.FAILED);
+                //Allure.step("Verification for special character  \"\"@/().-,’\" failed", Status.FAILED);
             }
         });
         clearOutField(searchField);
         searchField.sendKeys(name);
-
+        System.out.println(searchField.getText());
     }
 
     @Description("Marital Status cant be left as \"Select\"")
@@ -118,25 +127,39 @@ public class personalInfoLogic extends baseTest{
     }
     public void blankAddress(){
         Allure.step("Step 1: Verify address cant be left blank", () -> {
-            // Step 1 logic here
+
             searchField = driver.findElement(By.xpath("//input[@formcontrolname='address1']\n"));
             clearOutField(searchField);
+            //temp solution
+            driver.findElement(By.xpath("//input[@formcontrolname='address2']\n")).click();
+            try {
+                Thread.sleep(2500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             WebElement TempsearchField = driver.findElement(By.xpath("//input[@formcontrolname='address2']\n"));
             clearOutField(TempsearchField);
+            try {
+                Thread.sleep(2500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             // Additional operations
         });
         Allure.step("It should display a validation message for blank address", () -> {
             // Step 2 logic here
             presence = isElementPresent(shortWait,By.tagName("mat-error"));
-            if (presence) {
+            assertTrue(presence);
+            /*if (presence) {
                 searchField = driver.findElement(By.xpath("//input[@formcontrolname='address1']\n"));
-                Allure.step("Verify address Field cant be left blank", Status.PASSED);
+                //Allure.step("Verify address Field cant be left blank", Status.PASSED);
 
             }else {
-                Allure.step("Verify address Field cant be left blank", Status.FAILED);
-            }
+                //Allure.step("Verify address Field cant be left blank", Status.FAILED);
+            }*/
+            searchField.sendKeys("No Where To be");
         });
-        searchField.sendKeys("No Where To be");
+
     }
 
     void blankEmail(){
@@ -144,17 +167,19 @@ public class personalInfoLogic extends baseTest{
             // Step 1 logic here
             searchField = driver.findElement(By.xpath("//input[@formcontrolname='email']\n"));
             clearOutField(searchField);
+            driver.findElement(By.xpath("//input[@formcontrolname='address2']\n")).click();
             // Additional operations
         });
         Allure.step("It should display a validation message for blank email", () -> {
             // Step 2 logic here
             presence = isElementPresent(shortWait,By.tagName("mat-error"));
-            if (presence) {
+            assertTrue(presence);
+            /*if (presence) {
 
                 Allure.step("Verify email Field cant be left blank", Status.PASSED);
             }else {
                 Allure.step("Verify email Field cant be left blank", Status.FAILED);
-            }
+            }*/
         });
         searchField.sendKeys(email);
     }
@@ -163,16 +188,18 @@ public class personalInfoLogic extends baseTest{
             // Step 1 logic here
             searchField = driver.findElement(By.xpath("//input[@formcontrolname='mobileNo']\n"));
             clearOutField(searchField);
+            driver.findElement(By.xpath("//input[@formcontrolname='address2']\n")).click();
             // Additional operations
         });
         Allure.step("It should display a validation message for blank email", () -> {
             // Step 2 logic here
             presence = isElementPresent(shortWait,By.tagName("mat-error"));
-            if (presence) {
+            assertTrue(presence);
+            /*if (presence) {
                 Allure.step("Verify phone number Field cant be left blank", Status.PASSED);
             }else {
                 Allure.step("Verify phone number Field cant be left blank", Status.FAILED);
-            }
+            }*/
         });
         searchField.sendKeys("11111111111");
     }
@@ -181,14 +208,18 @@ public class personalInfoLogic extends baseTest{
         Allure.step("Step 1: Find ID  Field", () -> {
             searchField = driver.findElement(By.xpath("//input[@formcontrolname='state']\n"));
         });
-        Allure.step("Verifystate field un-editable", () -> {
+        Allure.step("Verify state field un-editable", () -> {
             // Step 2 logic here
-            boolean tempClickable = searchField.isEnabled();
-            if (tempClickable) {
+            //boolean tempClickable = searchField.isEnabled();
+            //assertFalse(tempClickable);
+            String ariaDisabled = searchField.getAttribute("readonly");
+            assertEquals("true", ariaDisabled);
+
+            /*if (tempClickable) {
                 Allure.step("Bug on  state, Field can be edit: ",Status.FAILED);
             }else {
                 Allure.step("Verify state cant be edit", Status.PASSED);
-            }
+            }*/
         });
 
     }
@@ -199,16 +230,19 @@ public class personalInfoLogic extends baseTest{
         });
         Allure.step("Verify city field un-editable", () -> {
             // Step 2 logic here
-            boolean tempClickable = searchField.isEnabled();
-            if (tempClickable) {
+            //boolean tempClickable = searchField.isEnabled();
+            //assertFalse(tempClickable);
+            String ariaDisabled = searchField.getAttribute("readonly");
+            assertEquals("true", ariaDisabled);
+
+            /*if (tempClickable) {
                 Allure.step("Bug on  city, Field can be edit: ",Status.FAILED);
             }else {
                 Allure.step("Verify city cant be edit", Status.PASSED);
-            }
+            }*/
         });
 
     }
-
     @Step("Next Button")
     void nextButton(){
         driver.findElement(By.cssSelector("button.btn-primary:nth-child(2) > span:nth-child(1)")).click();
